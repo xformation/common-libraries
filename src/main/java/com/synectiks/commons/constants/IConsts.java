@@ -8,6 +8,8 @@ package com.synectiks.commons.constants;
  */
 public interface IConsts {
 
+	String OAK_ROOT = "/Synectiks";
+
 	int SEC_IN_MILLIS = 1000;
 	int MIN_IN_MILLIS = 60 * SEC_IN_MILLIS;
 	int MIN_30_IN_MILLIS = 30 * MIN_IN_MILLIS;
