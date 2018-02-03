@@ -28,8 +28,9 @@ public interface IDBConsts {
 	String Col_PASSWORD = "password";
 	String Col_PERMISSIONS = "permissions";
 	String Col_ROLES = "roles";
-	String Col_USERNAME = "username";
+	String Col_SSMID = "ssmId";
 	String Col_TYPE = "type";
+	String Col_USERNAME = "username";
 
 	String Col_FK_CATEGORY = "fkCategoryId";
 

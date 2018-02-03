@@ -19,6 +19,7 @@ public class SSMState extends Entity implements Comparable<SSMState> {
 
 	private static final long serialVersionUID = 5844118213457305875L;
 
+	private String ssmId;
 	private String name;
 	private String parent;
 	private String target;
@@ -36,6 +37,11 @@ public class SSMState extends Entity implements Comparable<SSMState> {
 		return id;
 	}
 
+	@DynamoDBIndexHashKey(globalSecondaryIndexName = "indx_SSM_ID")
+	public String getSsmId() {
+		return ssmId;
+	}
+
 	@DynamoDBIndexHashKey(globalSecondaryIndexName = "indx_SSM_Name")
 	public String getName() {
 		return name;
@@ -51,6 +57,10 @@ public class SSMState extends Entity implements Comparable<SSMState> {
 
 	public String getEvent() {
 		return event;
+	}
+
+	public void setSsmId(String id) {
+		this.ssmId = id;
 	}
 
 	public void setName(String name) {
@@ -111,7 +121,8 @@ public class SSMState extends Entity implements Comparable<SSMState> {
 
 	@Override
 	public String toString() {
-		return "{\"" + (name != null ? "name\": \"" + name + "\", \"" : "")
+		return "{\"" + (ssmId != null ? "ssmId\": \"" + ssmId + "\", \"" : "")
+				+ (name != null ? "name\": \"" + name + "\", \"" : "")
 				+ (parent != null ? "parent\": \"" + parent + "\", \"" : "")
 				+ (target != null ? "target\": \"" + target + "\", \"" : "")
 				+ (event != null ? "event\": \"" + event + "\", \"" : "")
@@ -124,7 +135,7 @@ public class SSMState extends Entity implements Comparable<SSMState> {
 	@Override
 	public int compareTo(SSMState o) {
 		if (!IUtils.isNull(o)) {
-			return this.name.compareTo(o.name);
+			return this.ssmId.compareTo(o.ssmId) + this.name.compareTo(o.name);
 		}
 		return 1;
 	}
