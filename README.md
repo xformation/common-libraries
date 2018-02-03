@@ -23,16 +23,15 @@
 
 ### Build and install ###
 
-
 To get started build the build the latest sources with Maven 3 and Java 8 
 (or higher). 
 
-	$ cd oak.service
+	$ cd common-libraries
 	$ mvn clean install 
 
 It just a library project so no need to run it.
 
 
 ### Who do I talk to? ###
-	Please mail me on
-	sharmanju80@gmail.com
+	Please mail us on
+	info@syenctiks.com
