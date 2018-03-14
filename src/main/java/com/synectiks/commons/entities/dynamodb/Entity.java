@@ -36,6 +36,10 @@ public abstract class Entity implements Serializable {
 		this.id = id;
 	}
 
+	public void setId(long id) {
+		this.id = Long.toString(id);
+	}
+
 	public Date getCreatedAt() {
 		return createdAt;
 	}

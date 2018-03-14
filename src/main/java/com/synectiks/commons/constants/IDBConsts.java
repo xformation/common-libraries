@@ -30,6 +30,7 @@ public interface IDBConsts {
 	String Col_ROLES = "roles";
 	String Col_SSMID = "ssmId";
 	String Col_TYPE = "type";
+	String Col_EMAIL = "email";
 	String Col_USERNAME = "username";
 
 	String Col_FK_CATEGORY = "fkCategoryId";
