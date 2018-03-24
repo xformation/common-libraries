@@ -6,6 +6,7 @@ package com.synectiks.commons.entities.dynamodb;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldIndex;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -108,5 +109,13 @@ public abstract class Entity implements Serializable {
 		public String toString() {
 			return String.format("{\"name\": \"%s\", \"type\":\"%s\"}",	name, type);
 		}
+	}
+
+	/**
+	 * Method to load entity properties from DTO object
+	 * @param src
+	 */
+	public void fillFromDto(Object src) {
+		BeanUtils.copyProperties(src, this);
 	}
 }
