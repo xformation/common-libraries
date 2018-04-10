@@ -724,10 +724,12 @@ public interface IUtils {
 					dest.getParentFile().mkdirs();
 					dest.createNewFile();
 				}
-				BufferedOutputStream bos = new BufferedOutputStream(
-						new FileOutputStream(dest));
-				bos.write(files[i].getBytes());
-				bos.close();
+				try (BufferedOutputStream bos = new BufferedOutputStream(
+						new FileOutputStream(dest))) {
+					bos.write(files[i].getBytes());
+				} catch (IOException ioe) {
+					logger.error(ioe.getMessage(), ioe);
+				}
 				if (!IUtils.isNullOrEmpty(nodePath)) {
 					nodePath += "/" + name;
 				}

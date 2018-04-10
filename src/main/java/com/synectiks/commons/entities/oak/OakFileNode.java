@@ -19,7 +19,7 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.UndefinedTypeC
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.synectiks.commons.utils.IUtils;
 
 /**
@@ -38,8 +38,8 @@ public class OakFileNode extends OakEntity {
 	private String encoding;
 	@Field(jcrType = PropertyType.TYPENAME_STRING)
 	private String path;
-	@JsonIgnore
-	@Field(jcrType = PropertyType.TYPENAME_REFERENCE, converter = UndefinedTypeConverterImpl.class)
+	@Field(jcrType = PropertyType.TYPENAME_BINARY,
+			converter = UndefinedTypeConverterImpl.class)
 	private InputStream data;
 
 	public String getName() {
@@ -88,12 +88,12 @@ public class OakFileNode extends OakEntity {
 
 	@Override
 	public String toString() {
-		return "{" + (name != null ? "\"name\": \"" + name + "\", " : "")
-				+ (contentType != null ? "\"contentType\": \"" + contentType + "\", "
-						: "")
-				+ (encoding != null ? "\"encoding\": \"" + encoding + "\", " : "")
-				+ (path != null ? "\"path\": \"" + IUtils.escapeStr(path) + "\" " : "")
-				+ "}";
+		try {
+			return IUtils.OBJECT_MAPPER.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			IUtils.logger.error("OakFileNode: " + e.getMessage(), e);
+		}
+		return null;
 	}
 
 	/**
