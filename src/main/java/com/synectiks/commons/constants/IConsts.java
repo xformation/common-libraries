@@ -45,6 +45,7 @@ public interface IConsts {
 	int DEF_PAGE = 0;
 	int PAGE_SIZE = 10;
 	String DEF_ENCODING = "UTF-8";
+	String JSON_DATE_FORMAT = "EEE MMM dd HH:mm:ss zzz yyyy";
 	String DEF_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
 	String LOGOUT_URL = "shiro.logout.url";

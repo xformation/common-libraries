@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -34,6 +35,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -56,6 +58,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -83,6 +86,7 @@ public interface IUtils {
 	ObjectMapper OBJECT_MAPPER = new ObjectMapper()
 			.setVisibility(PropertyAccessor.ALL, Visibility.NONE)
 			.setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
+			.setDateFormat(new SimpleDateFormat(IConsts.JSON_DATE_FORMAT))
 			.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -439,10 +443,10 @@ public interface IUtils {
 	 *         attachments</b>
 	 * @throws Exception
 	 */
-	static Object sendMultiPartPostReq(String url, Map<String, Object> params,
-			Map<String, File> files) throws Exception {
+	static String sendMultiPartPostReq(String url,
+			Map<String, Object> params, Map<String, File> files) throws Exception {
 		Assert.assertNotNull("Rest multipart post request url must not be null", url);
-		Object res = null;
+		String res = null;
 		try {
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpPost post = new HttpPost(url);
@@ -461,7 +465,7 @@ public interface IUtils {
 			}
 
 			post.setEntity(fEntity.build());
-			System.out.println("executing request " + post.getRequestLine());
+			logger.info("executing request " + post.getRequestLine());
 			HttpResponse response = client.execute(post);
 			if (!isNull(response)) {
 				res = EntityUtils.toString(response.getEntity());
@@ -734,8 +738,6 @@ public interface IUtils {
 					nodePath += "/" + name;
 				}
 				OakFileNode fileNode = OakFileNode.createNode(nodePath, dest);
-				InputStream is = null;
-				fileNode.setData(is);
 				map.put(name, fileNode);
 			}
 		}
@@ -912,6 +914,10 @@ public interface IUtils {
 	static <T> T sendPostRestRequest(RestTemplate template, String url, Object request,
 			Class<T> cls, Map<String, Object> params, MediaType cntType) {
 		T res = null;
+		if (IUtils.isNullOrEmpty(url)) {
+			logger.error("Url is null or empty", new NullPointerException("Url: " + url));
+			return res;
+		}
 		logger.info("Url: " + url);
 		if (!isNull(params) && !params.isEmpty()) {
 			HttpHeaders headers = new HttpHeaders();
@@ -940,6 +946,10 @@ public interface IUtils {
 	 */
 	static <T> T sendGetRestRequest(RestTemplate template, String url,
 			Map<String, Object> params, Class<T> cls) {
+		if (IUtils.isNullOrEmpty(url)) {
+			logger.error("Url is null or empty", new NullPointerException("Url: " + url));
+			return null;
+		}
 		url = addParamsInUrl(url, params);
 		logger.info("Rest Call: " + url);
 		T res = template.getForObject(url, cls);
@@ -978,6 +988,10 @@ public interface IUtils {
 	static <T> T sendRestRequest(RestTemplate template, String url, HttpMethod method,
 			Map<String, String> headers, Map<String, Object> params, T entity,
 			Class<T> cls) {
+		if (IUtils.isNullOrEmpty(url)) {
+			logger.error("Url is null or empty", new NullPointerException("Url: " + url));
+			return null;
+		}
 		HttpHeaders httpHdr = getHttpHeaders(headers);
 		logger.info("Rest Call: " + url);
 		HttpEntity<T> request = null;
@@ -1019,5 +1033,51 @@ public interface IUtils {
 			}
 		}
 		return map;
+	}
+
+	/**
+	 * Method to save uploaded file at {@code target/attach/} dir
+	 * @param file {@code MultipartFile} object
+	 * @param upPath path to save uploaded file
+	 * @return absolute file path to send for attachment
+	 */
+	public static ResponseEntity<Object> saveUploadedFile(
+			MultipartFile file, String upPath) {
+		Object res = null;
+		HttpStatus status = HttpStatus.OK;
+		if (!isNull(file) && !file.isEmpty()) {
+			try {
+				File savePath = new File(upPath, file.getOriginalFilename());
+				FileUtils.copyToFile(file.getInputStream(), savePath);
+				// Save file at destination file path
+				res = savePath.getAbsolutePath();
+			} catch (Throwable e) {
+				logger.error(e.getMessage(), e);
+				res = getFailedResponse(e);
+				status = HttpStatus.EXPECTATION_FAILED;
+			}
+		} else {
+			res = getFailedResponse(
+					"Uploaded file is null or empty");
+			status = HttpStatus.PRECONDITION_FAILED;
+		}
+		return new ResponseEntity<>(res, status);
+	}
+
+	/**
+	 * Method to read file and set stream into OakFileNode
+	 * @param node
+	 */
+	static void loadFileStreamInNode(OakFileNode node) {
+		if (!isNull(node) && !isNullOrEmpty(node.getPath())) {
+			File src = new File(node.getPath());
+			if (!isNull(src) && src.exists()) {
+				try {
+					node.setData(new FileInputStream(src));
+				} catch (FileNotFoundException e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		}
 	}
 }

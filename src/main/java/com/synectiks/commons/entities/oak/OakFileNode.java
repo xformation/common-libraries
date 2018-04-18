@@ -15,11 +15,10 @@ import javax.jcr.PropertyType;
 import javax.jcr.nodetype.NodeType;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.UndefinedTypeConverterImpl;
+import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.BinaryTypeConverterImpl;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.synectiks.commons.utils.IUtils;
 
 /**
@@ -39,7 +38,7 @@ public class OakFileNode extends OakEntity {
 	@Field(jcrType = PropertyType.TYPENAME_STRING)
 	private String path;
 	@Field(jcrType = PropertyType.TYPENAME_BINARY,
-			converter = UndefinedTypeConverterImpl.class)
+			converter = BinaryTypeConverterImpl.class)
 	private InputStream data;
 
 	public String getName() {
@@ -88,12 +87,50 @@ public class OakFileNode extends OakEntity {
 
 	@Override
 	public String toString() {
-		try {
-			return IUtils.OBJECT_MAPPER.writeValueAsString(this);
-		} catch (JsonProcessingException e) {
-			IUtils.logger.error("OakFileNode: " + e.getMessage(), e);
+		StringBuilder builder = new StringBuilder();
+		builder.append("{");
+		if (!IUtils.isNullOrEmpty(name)) {
+			builder.append("\"name\": \"" + name + "\"");
 		}
-		return null;
+		if (!IUtils.isNullOrEmpty(contentType)) {
+			builder.append(builder.length() > 2 ? ", " : "");
+			builder.append("\"contentType\": \"" + contentType + "\"");
+		}
+		if (!IUtils.isNullOrEmpty(encoding)) {
+			builder.append(builder.length() > 2 ? ", " : "");
+			builder.append("\"encoding\": \"" + encoding + "\"");
+		}
+		if (!IUtils.isNullOrEmpty(path)) {
+			builder.append(builder.length() > 2 ? ", " : "");
+			builder.append("\"path\": \"" + path + "\"");
+		}
+		if (!IUtils.isNullOrEmpty(getEntityClass())) {
+			builder.append(builder.length() > 2 ? ", " : "");
+			builder.append("\"entityClass\": \"" + getEntityClass() + "\"");
+		}
+		if (!IUtils.isNullOrEmpty(getJcrPath())) {
+			builder.append(builder.length() > 2 ? ", " : "");
+			builder.append("\"jcrPath\": \"" + getJcrPath() + "\"");
+		}
+		if (!IUtils.isNull(getCreatedAt())) {
+			builder.append(builder.length() > 2 ? ", " : "");
+			builder.append("\"createdAt\": \"" + getCreatedAt() + "\"");
+		}
+		if (!IUtils.isNull(getUpdatedAt())) {
+			builder.append(builder.length() > 2 ? ", " : "");
+			builder.append("\"updatedAt\": \"" + getUpdatedAt() + "\"");
+		}
+		/*if (!IUtils.isNull(datOa)) {
+			builder.append(builder.length() > 2 ? ", " : "");
+			try {
+				builder.append("\"data\": \"" + IOUtils.toString(
+						data, IConsts.DEF_ENCODING) + "\"");
+			} catch (IOException e) {
+				IUtils.logger.error("OakFileNode: " + e.getMessage(), e);
+			}
+		}*/
+		builder.append("}");
+		return builder.toString();
 	}
 
 	/**
@@ -113,11 +150,14 @@ public class OakFileNode extends OakEntity {
 			node.setCreatedAt(new Date(dt.toMillis()));
 			dt = IUtils.getFileAttribute(file, "updatedAt");
 			node.setUpdatedAt(new Date(dt.toMillis()));
+			IUtils.logger.info("OakFileNode: before get file name");
 			node.setName(FilenameUtils.getName(file.getName()));
+			IUtils.logger.info("OakFileNode: after get file name");
 			node.setPath(file.getAbsolutePath());
-			FileInputStream fis = new FileInputStream(file);
-			node.setEncoding(new InputStreamReader(fis).getEncoding());
-			node.setData(fis);
+			FileInputStream fisTmp = new FileInputStream(file);
+			node.setEncoding(new InputStreamReader(fisTmp).getEncoding());
+			fisTmp.close();
+			IUtils.logger.info("OakFileNode: stream encoding: " + node.getEncoding());
 			return node;
 		} catch (Throwable th) {
 			th.printStackTrace();
