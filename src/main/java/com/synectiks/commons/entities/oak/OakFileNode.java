@@ -12,7 +12,6 @@ import java.nio.file.attribute.FileTime;
 import java.util.Date;
 
 import javax.jcr.PropertyType;
-import javax.jcr.nodetype.NodeType;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.BinaryTypeConverterImpl;
@@ -24,10 +23,21 @@ import com.synectiks.commons.utils.IUtils;
 /**
  * @author Rajesh
  */
-@Node(jcrType = NodeType.NT_UNSTRUCTURED)
+@Node(jcrType = "nt:unstructured")
 public class OakFileNode extends OakEntity {
 
 	private static final long serialVersionUID = 3473027035476995787L;
+	public static enum FIELDS {
+		contentType,
+		createdAt,
+		data,
+		encoding,
+		entityClass,
+		jcrPath,
+		name,
+		path,
+		updatedAt;
+	};
 
 	@Field(jcrType = PropertyType.TYPENAME_STRING)
 	private String name;
@@ -82,7 +92,7 @@ public class OakFileNode extends OakEntity {
 	}
 
 	public void setData(String data) {
-		this.data = IUtils.convertStringToStream(data);
+		this.data = IUtils.convertStringToStream(data, this.encoding);
 	}
 
 	@Override

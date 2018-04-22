@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
@@ -40,6 +41,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
@@ -51,6 +53,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Assert;
 import org.slf4j.Logger;
@@ -477,6 +480,40 @@ public interface IUtils {
 	}
 
 	/**
+	 * Method to call a service using POST method url
+	 * and params to download a file stream
+	 * @param url fully qualified url for rest service
+	 * @param params {@code Map<String, Object>}
+	 * @return {@code HttpResponse} as string
+	 * @throws Exception
+	 */
+	static InputStream getStreamFromPostReq(String url, Map<String, Object> params)
+			throws Exception {
+		try {
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpPost post = new HttpPost(url);
+			if (!isNull(params)) {
+				logger.info("Params: " + params);
+				post.setEntity(new UrlEncodedFormEntity(getNameValuePairList(params)));
+			}
+			HttpResponse res = client.execute(post);
+			if (!isNull(res) && !isNull(res.getEntity())) {
+				logger.info("Response status: " + res.getStatusLine());
+				if (res.getStatusLine().getStatusCode() == HttpStatus.OK.value()) {
+					return res.getEntity().getContent();
+				} else {
+					logger.error("Failed to call '" + url + "'",
+							new Exception(EntityUtils.toString(res.getEntity())));
+				}
+			}
+		} catch (Throwable e) {
+			logger.info("Exception occured while hitting url '" + url + "': "
+					+ e.getMessage());
+		}
+		return null;
+	}
+
+	/**
 	 * Method to call a rest service using POST method url and params
 	 * @param url fully qualified url for rest service
 	 * @param params {@code Map<String, Object>}
@@ -643,7 +680,17 @@ public interface IUtils {
 			} else if (val instanceof JSONObject) {
 				res = val.toString();
 			} else if (val instanceof Map) {
-				res = new JSONObject((Map<?, ?>) val).toString();
+				Map<?, ?> mp = (Map<?, ?>) val;
+				JSONObject json = new JSONObject();
+				for (Entry<?, ?> entry : mp.entrySet()) {
+					try {
+						json.put(entry.getKey().toString(),
+								getStringFromValue(entry.getValue()));
+					} catch (JSONException e) {
+						logger.error(e.getMessage());
+					}
+				}
+				res = json.toString();
 			} else if (val instanceof List) {
 				res = getStringFromValue(new JSONArray((List<?>) val));
 			} else {
@@ -810,11 +857,15 @@ public interface IUtils {
 	/**
 	 * Method convert string into stream
 	 * @param input
+	 * @param encoding 
 	 * @return
 	 */
-	static InputStream convertStringToStream(String input) {
+	static InputStream convertStringToStream(String input, String encoding) {
 		try {
-			return new ByteArrayInputStream(input.getBytes(IConsts.DEF_ENCODING));
+			if (isNullOrEmpty(encoding)) {
+				encoding = IConsts.DEF_ENCODING;
+			}
+			return new ByteArrayInputStream(input.getBytes(encoding));
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}
@@ -1079,5 +1130,42 @@ public interface IUtils {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Method to create oak file node from response string.
+	 * @param res
+	 * @param key 
+	 * @return
+	 */
+	static OakFileNode createOakFileNode(String res, String key) {
+		OakFileNode node = null;
+		if (!isNullOrEmpty(res)) {
+			try {
+				JSONObject obj = new JSONObject(res);
+				if (obj.has(key)) {
+					logger.info("Found an object with key: " + key);
+					node = new OakFileNode();
+					JSONObject json = new JSONObject(obj.optString(key));
+					node.setContentType(json.optString(
+							OakFileNode.FIELDS.contentType.name()));
+					node.setCreatedAt(parseDate(json.optString(OakFileNode.FIELDS
+							.createdAt.name()), null, IConsts.JSON_DATE_FORMAT));
+					node.setEncoding(json.optString(OakFileNode.FIELDS.encoding.name()));
+					node.setEntityClass(json.optString(
+							OakFileNode.FIELDS.entityClass.name()));
+					node.setJcrPath(json.optString(OakFileNode.FIELDS.jcrPath.name()));
+					node.setName(json.optString(OakFileNode.FIELDS.name.name()));
+					node.setPath(json.optString(OakFileNode.FIELDS.path.name()));
+					node.setUpdatedAt(parseDate(json.optString(OakFileNode.FIELDS
+							.updatedAt.name()), null, IConsts.JSON_DATE_FORMAT));
+					// set input stream
+					node.setData(json.optString(OakFileNode.FIELDS.data.name()));
+				}
+			} catch (JSONException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+		return node;
 	}
 }
