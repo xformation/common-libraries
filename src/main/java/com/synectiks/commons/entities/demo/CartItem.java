@@ -25,6 +25,7 @@ public class CartItem extends Entity implements IESEntity {
 
 	private int quantity;
 	private String productId;
+	private String state;
 	private double totalPrice;
 
 	@Override
@@ -49,6 +50,14 @@ public class CartItem extends Entity implements IESEntity {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	public double getTotalPrice() {
