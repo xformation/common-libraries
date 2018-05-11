@@ -484,11 +484,45 @@ public interface IUtils {
 	 * and params to download a file stream
 	 * @param url fully qualified url for rest service
 	 * @param params {@code Map<String, Object>}
-	 * @return {@code HttpResponse} as string
+	 * @return {@code InputStream} as object
 	 * @throws Exception
 	 */
 	static InputStream getStreamFromPostReq(String url, Map<String, Object> params)
 			throws Exception {
+		org.apache.http.HttpEntity res = getPostResponseEntity(url, params);
+		if (!IUtils.isNull(res)) {
+			return res.getContent();
+		}
+		return null;
+	}
+
+	/**
+	 * Method to call a service using POST method url
+	 * and params to download a file stream
+	 * @param url fully qualified url for rest service
+	 * @param params {@code Map<String, Object>}
+	 * @return {@code HttpResponse} as string
+	 * @throws Exception
+	 */
+	static String getStringFromPostReq(String url, Map<String, Object> params)
+			throws Exception {
+		org.apache.http.HttpEntity res = getPostResponseEntity(url, params);
+		if (!IUtils.isNull(res)) {
+			return EntityUtils.toString(res);
+		}
+		return null;
+	}
+
+	/**
+	 * Method to call a service using POST method url
+	 * and params to download a file stream
+	 * @param url fully qualified url for rest service
+	 * @param params {@code Map<String, Object>}
+	 * @return {@code HttpEntity} object
+	 * @throws Exception
+	 */
+	static org.apache.http.HttpEntity getPostResponseEntity(
+			String url, Map<String, Object> params) throws Exception {
 		try {
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpPost post = new HttpPost(url);
@@ -500,7 +534,7 @@ public interface IUtils {
 			if (!isNull(res) && !isNull(res.getEntity())) {
 				logger.info("Response status: " + res.getStatusLine());
 				if (res.getStatusLine().getStatusCode() == HttpStatus.OK.value()) {
-					return res.getEntity().getContent();
+					return res.getEntity();
 				} else {
 					logger.error("Failed to call '" + url + "'",
 							new Exception(EntityUtils.toString(res.getEntity())));
@@ -509,6 +543,7 @@ public interface IUtils {
 		} catch (Throwable e) {
 			logger.info("Exception occured while hitting url '" + url + "': "
 					+ e.getMessage());
+			throw e;
 		}
 		return null;
 	}
