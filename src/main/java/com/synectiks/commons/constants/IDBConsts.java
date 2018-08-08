@@ -20,6 +20,7 @@ public interface IDBConsts {
 	String Tbl_SSM_STATE = "SSMState";
 	String Tbl_SUBSCRIBE = "Subscribe";
 	String Tbl_USERS = "Users";
+	String Tbl_Policy = "Policy";
 
 	String Col_DESC = "description";
 	String Col_ID = "id";

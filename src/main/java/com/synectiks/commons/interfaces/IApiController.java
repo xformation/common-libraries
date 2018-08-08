@@ -19,6 +19,7 @@ public interface IApiController {
 	String SEC_API = API_PATH + "/security";
 	String PUB_API = SEC_API + "/public";
 	String SSM_API = API_PATH + "/ssm";
+	String PLC_API = API_PATH + "/policy";
 	
 	String URL_ACTION = "/action";
 	String URL_ACTIVITY = "/activity";
