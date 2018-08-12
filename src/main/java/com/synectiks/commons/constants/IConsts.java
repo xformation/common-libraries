@@ -35,10 +35,12 @@ public interface IConsts {
 
 	// Index names of entities NOTE: index names must be in lower case
 	String INDX_SERVICE = "indx_services";
+	String INDX_SOURCE = "indx_source";
 	String INDX_SUBSCRIBE = "indx_subscribe";
 	String INDX_USER = "indx_users";
 
 	String INDX_TYPE_SERVICE = "indx_type_service";
+	String INDX_TYPE_SOURCE = "indx_type_source";
 	String INDX_TYPE_SUBSCRIBE = "indx_type_subscribe";
 	String INDEX_TYPE_USER = "indx_type_user";
 
