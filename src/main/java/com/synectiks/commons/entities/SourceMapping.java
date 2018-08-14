@@ -22,7 +22,7 @@ public class SourceMapping {
 		srcDynMap.append("}");
 		JSONObject mappings = null;
 		try {
-			new JSONObject(srcDynMap.toString());
+			mappings = new JSONObject(srcDynMap.toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

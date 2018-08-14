@@ -87,8 +87,10 @@ public interface IConsts {
 	String PRM_CLASS = "cls";
 	String PRM_ENTITY = "entity";
 	String PRM_KEY = "key";
+	String PRM_MAPPINGS = "mappings";
 	String PRM_VALUE = "value";
 
+	String KEY_SEARCH_URL = "synectiks.search.url";
 	String KEY_INDX_EVENT_FIRE = "search.fire.event.url";
 	//String URL_INDX_EVENT_FIRE = "http://localhost:8081/api/v1/auth/seach/fireEvent";
 	String URL_INDX_EVENT_FIRE = "http://localhost:8092/seach/fireEvent";
