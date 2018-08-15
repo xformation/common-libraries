@@ -37,6 +37,7 @@ public class Policy extends Entity {
 
 	private String name;
 	private String json;
+	private String cmdType;
 	private String command;
 
 	private String description;
@@ -64,6 +65,14 @@ public class Policy extends Entity {
 		this.json = json;
 	}
 
+	public String getCmdType() {
+		return cmdType;
+	}
+
+	public void setCmdType(String cmdType) {
+		this.cmdType = cmdType;
+	}
+
 	public String getCommand() {
 		return command;
 	}
@@ -82,10 +91,10 @@ public class Policy extends Entity {
 
 	@Override
 	public String toString() {
-		return "{ " + (name != null ? "\"name\": \"" + name + "\", \"" : "")
-				+ (description != null ? "\"description\": \"" + description + "\", \""
-						: "")
-				+ (json != null ? "\"json\": \"" + json + "\", \"" : "")
+		return "{ " + (name != null ? "\"name\": \"" + name + "\", " : "")
+				+ (description != null ? "\"description\": \"" + description + "\", " : "")
+				+ (json != null ? "\"json\": \"" + json + "\", " : "")
+				+ (cmdType != null ? "\"cmdType\": \"" + cmdType + "\", " : "")
 				+ (command != null ? "\"event\": \"" + command + "\"" : "") + "}";
 	}
 
