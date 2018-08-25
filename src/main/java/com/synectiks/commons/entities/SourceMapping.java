@@ -14,6 +14,9 @@ public class SourceMapping {
 	public static JSONObject getSourceEntityMapping() {
 		StringBuilder srcDynMap = new StringBuilder();
 		srcDynMap.append("{");
+		srcDynMap.append("	\"_timestamp\": {");
+		srcDynMap.append("		\"enabled\": \"true\"");
+		srcDynMap.append("	},");
 		srcDynMap.append("	\"dynamic_templates\": [");
 		srcDynMap.append(getNestedMapping());
 		srcDynMap.append(", ");

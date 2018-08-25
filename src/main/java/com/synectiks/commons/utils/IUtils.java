@@ -446,8 +446,8 @@ public interface IUtils {
 	 *         attachments</b>
 	 * @throws Exception
 	 */
-	static String sendMultiPartPostReq(String url,
-			Map<String, Object> params, Map<String, File> files) throws Exception {
+	static String sendMultiPartPostReq(String url, Map<String, Object> params,
+			Map<String, File> files) throws Exception {
 		Assert.assertNotNull("Rest multipart post request url must not be null", url);
 		String res = null;
 		try {
@@ -480,8 +480,8 @@ public interface IUtils {
 	}
 
 	/**
-	 * Method to call a service using POST method url
-	 * and params to download a file stream
+	 * Method to call a service using POST method url and params to download a
+	 * file stream
 	 * @param url fully qualified url for rest service
 	 * @param params {@code Map<String, Object>}
 	 * @return {@code InputStream} as object
@@ -497,8 +497,8 @@ public interface IUtils {
 	}
 
 	/**
-	 * Method to call a service using POST method url
-	 * and params to download a file stream
+	 * Method to call a service using POST method url and params to download a
+	 * file stream
 	 * @param url fully qualified url for rest service
 	 * @param params {@code Map<String, Object>}
 	 * @return {@code HttpResponse} as string
@@ -514,15 +514,15 @@ public interface IUtils {
 	}
 
 	/**
-	 * Method to call a service using POST method url
-	 * and params to download a file stream
+	 * Method to call a service using POST method url and params to download a
+	 * file stream
 	 * @param url fully qualified url for rest service
 	 * @param params {@code Map<String, Object>}
 	 * @return {@code HttpEntity} object
 	 * @throws Exception
 	 */
-	static org.apache.http.HttpEntity getPostResponseEntity(
-			String url, Map<String, Object> params) throws Exception {
+	static org.apache.http.HttpEntity getPostResponseEntity(String url,
+			Map<String, Object> params) throws Exception {
 		try {
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpPost post = new HttpPost(url);
@@ -892,7 +892,7 @@ public interface IUtils {
 	/**
 	 * Method convert string into stream
 	 * @param input
-	 * @param encoding 
+	 * @param encoding
 	 * @return
 	 */
 	static InputStream convertStringToStream(String input, String encoding) {
@@ -1127,8 +1127,8 @@ public interface IUtils {
 	 * @param upPath path to save uploaded file
 	 * @return absolute file path to send for attachment
 	 */
-	public static ResponseEntity<Object> saveUploadedFile(
-			MultipartFile file, String upPath) {
+	public static ResponseEntity<Object> saveUploadedFile(MultipartFile file,
+			String upPath) {
 		Object res = null;
 		HttpStatus status = HttpStatus.OK;
 		if (!isNull(file) && !file.isEmpty()) {
@@ -1143,8 +1143,7 @@ public interface IUtils {
 				status = HttpStatus.EXPECTATION_FAILED;
 			}
 		} else {
-			res = getFailedResponse(
-					"Uploaded file is null or empty");
+			res = getFailedResponse("Uploaded file is null or empty");
 			status = HttpStatus.PRECONDITION_FAILED;
 		}
 		return new ResponseEntity<>(res, status);
@@ -1170,7 +1169,7 @@ public interface IUtils {
 	/**
 	 * Method to create oak file node from response string.
 	 * @param res
-	 * @param key 
+	 * @param key
 	 * @return
 	 */
 	static OakFileNode createOakFileNode(String res, String key) {
@@ -1182,18 +1181,20 @@ public interface IUtils {
 					logger.info("Found an object with key: " + key);
 					node = new OakFileNode();
 					JSONObject json = new JSONObject(obj.optString(key));
-					node.setContentType(json.optString(
-							OakFileNode.FIELDS.contentType.name()));
-					node.setCreatedAt(parseDate(json.optString(OakFileNode.FIELDS
-							.createdAt.name()), null, IConsts.JSON_DATE_FORMAT));
+					node.setContentType(
+							json.optString(OakFileNode.FIELDS.contentType.name()));
+					node.setCreatedAt(
+							parseDate(json.optString(OakFileNode.FIELDS.createdAt.name()),
+									null, IConsts.JSON_DATE_FORMAT));
 					node.setEncoding(json.optString(OakFileNode.FIELDS.encoding.name()));
-					node.setEntityClass(json.optString(
-							OakFileNode.FIELDS.entityClass.name()));
+					node.setEntityClass(
+							json.optString(OakFileNode.FIELDS.entityClass.name()));
 					node.setJcrPath(json.optString(OakFileNode.FIELDS.jcrPath.name()));
 					node.setName(json.optString(OakFileNode.FIELDS.name.name()));
 					node.setPath(json.optString(OakFileNode.FIELDS.path.name()));
-					node.setUpdatedAt(parseDate(json.optString(OakFileNode.FIELDS
-							.updatedAt.name()), null, IConsts.JSON_DATE_FORMAT));
+					node.setUpdatedAt(
+							parseDate(json.optString(OakFileNode.FIELDS.updatedAt.name()),
+									null, IConsts.JSON_DATE_FORMAT));
 					// set input stream
 					node.setData(json.optString(OakFileNode.FIELDS.data.name()));
 				}
@@ -1202,5 +1203,73 @@ public interface IUtils {
 			}
 		}
 		return node;
+	}
+
+	/**
+	 * Method to deep merget json objects.
+	 * @param source
+	 * @param target
+	 * @return
+	 * @throws JSONException
+	 */
+	static JSONObject deepMerge(JSONObject source, JSONObject target) {
+		if (!IUtils.isNull(source) && !IUtils.isNull(target)) {
+			while (source.keys().hasNext()) {
+				try {
+					String key = (String) source.keys().next();
+					Object value = source.get(key);
+					if (!target.has(key)) {
+						// new value for "key":
+						target.put(key, value);
+					} else {
+						// existing value for "key" - recursively deep merge:
+						if (value instanceof JSONObject) {
+							JSONObject valueJson = (JSONObject) value;
+							deepMerge(valueJson, target.getJSONObject(key));
+						} else if (value instanceof JSONArray) {
+							JSONArray arr = (JSONArray) value;
+							Object tarVal = target.get(key);
+							JSONArray tVal = new JSONArray();
+							// make sure target value is too json array.
+							if (tarVal instanceof JSONArray) {
+								tVal = (JSONArray) tarVal;
+							} else {
+								tVal.put(tarVal);
+							}
+							for (int i = 0; i < arr.length(); i++) {
+								tVal.put(arr.get(i));
+							}
+						} else {
+							target.put(key, value);
+						}
+					}
+				} catch(JSONException je) {
+					logger.error(je.getMessage(), je);
+				}
+			}
+		}
+		return target;
+	}
+
+	/**
+	 * Method process the whole string and remove all unwanted spaces.
+	 * @param qry
+	 * @return
+	 */
+	static String refineQueryString(String qry) {
+		String res = null;
+		if (!isNull(qry)) {
+			StringBuilder sb = new StringBuilder();
+			StringTokenizer tokens = new StringTokenizer(qry, IConsts.SPACE);
+			while (tokens.hasMoreTokens()) {
+				String token = tokens.nextToken();
+				if (!isNullOrEmpty(token)) {
+					sb.append(sb.length() > 0 ? IConsts.SPACE : "");
+					sb.append(token);
+				}
+			}
+			res = sb.toString();
+		}
+		return res;
 	}
 }

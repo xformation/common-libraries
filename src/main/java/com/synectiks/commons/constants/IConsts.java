@@ -24,10 +24,12 @@ public interface IConsts {
 
 	String ADMIN = "ADMIN";
 	String CAUSE = "Cause";
+	String EMPTY = "";
 	String ERROR = "Error";
 	String FAILED = "Failed";
 	String FROM = "From";
 	String RANGES = "ranges";
+	String SPACE = " ";
 	String STATUS = "Status";
 	String SUCCESS = "Success";
 	String TO = "TO";
