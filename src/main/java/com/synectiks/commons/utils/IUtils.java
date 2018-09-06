@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -1214,41 +1215,117 @@ public interface IUtils {
 	 */
 	static JSONObject deepMerge(JSONObject source, JSONObject target) {
 		if (!IUtils.isNull(source) && !IUtils.isNull(target)) {
-			while (source.keys().hasNext()) {
+			@SuppressWarnings("rawtypes")
+			Iterator keys = source.keys();
+			while (keys.hasNext()) {
 				try {
-					String key = (String) source.keys().next();
+					String key = (String) keys.next();
 					Object value = source.get(key);
 					if (!target.has(key)) {
 						// new value for "key":
 						target.put(key, value);
 					} else {
-						// existing value for "key" - recursively deep merge:
-						if (value instanceof JSONObject) {
-							JSONObject valueJson = (JSONObject) value;
-							deepMerge(valueJson, target.getJSONObject(key));
-						} else if (value instanceof JSONArray) {
-							JSONArray arr = (JSONArray) value;
-							Object tarVal = target.get(key);
-							JSONArray tVal = new JSONArray();
-							// make sure target value is too json array.
-							if (tarVal instanceof JSONArray) {
-								tVal = (JSONArray) tarVal;
-							} else {
-								tVal.put(tarVal);
-							}
-							for (int i = 0; i < arr.length(); i++) {
-								tVal.put(arr.get(i));
-							}
-						} else {
-							target.put(key, value);
-						}
+						target.put(key, getMergedValue(value, target.opt(key)));
 					}
 				} catch(JSONException je) {
 					logger.error(je.getMessage(), je);
 				}
 			}
+		} else {
+			if (!IUtils.isNull(source)) {
+				return source;
+			}
 		}
 		return target;
+	}
+
+	/**
+	 * Method to merge src and tar values for output value.
+	 * @param src
+	 * @param tar
+	 * @return
+	 */
+	static Object getMergedValue(Object src, Object tar) {
+		if (!IUtils.isNull(src) && !IUtils.isNull(tar)) {
+			Object merged = null;
+			if (src instanceof JSONArray && tar instanceof JSONArray) {
+				merged = mergeJsonArrays((JSONArray) src, (JSONArray) tar);
+			} else if (src instanceof JSONObject && tar instanceof JSONObject) {
+				merged = deepMerge((JSONObject) src, (JSONObject) tar);
+			} else {
+				if (src.equals(tar)) {
+					merged = src;
+				} else {
+					JSONArray arr = new JSONArray();
+					arr.put(src);
+					arr.put(tar);
+					merged = arr;
+				}
+			}
+			return merged;
+		} else  if (!IUtils.isNull(src)) {
+			return src;
+		} else {
+			return tar;
+		}
+	}
+
+	/**
+	 * Method to merge json arrays
+	 * @param src
+	 * @param tar
+	 * @return
+	 */
+	static JSONArray mergeJsonArrays(JSONArray src, JSONArray tar) {
+		if (!IUtils.isNull(src) && !IUtils.isNull(tar)) {
+			JSONArray merged = src;
+			try {
+				for (int i = 0; i < tar.length(); i++) {
+					Object value = tar.get(i);
+					if (value instanceof JSONArray) {
+						JSONArray arr = (JSONArray) value;
+						for (int j = 0; j < arr.length(); j++) {
+							if (!jsonArrContains(merged, arr.get(j))) {
+								merged.put(arr);
+							}
+						}
+					} else {
+						if (!jsonArrContains(merged, value)) {
+							merged.put(value);
+						}
+					}
+				}
+			} catch (JSONException e) {
+				// ignore it.
+			}
+			return merged;
+		}else  if (!IUtils.isNull(src)) {
+			return src;
+		} else {
+			return tar;
+		}
+	}
+
+	/**
+	 * Method to check if object already exists in json array.
+	 * @param arr
+	 * @param obj
+	 * @return
+	 */
+	static boolean jsonArrContains(JSONArray arr, Object obj) {
+		if (!IUtils.isNull(arr) && !IUtils.isNull(obj)) {
+			for (int i = 0; i < arr.length(); i++) {
+				try {
+					Object val = arr.get(i);
+					if (!IUtils.isNull(val) && val.equals(obj)) {
+						return true;
+					}
+				} catch (JSONException e) {
+					// ignore it.
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
