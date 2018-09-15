@@ -89,6 +89,7 @@ public interface IConsts {
 	String PRM_CLASS = "cls";
 	String PRM_ENTITY = "entity";
 	String PRM_KEY = "key";
+	String PRM_FLD_ONLY = "fieldsOnly";
 	String PRM_MAPPINGS = "mappings";
 	String PRM_VALUE = "value";
 
