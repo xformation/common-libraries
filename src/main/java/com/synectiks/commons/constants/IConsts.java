@@ -97,4 +97,7 @@ public interface IConsts {
 	String KEY_INDX_EVENT_FIRE = "search.fire.event.url";
 	//String URL_INDX_EVENT_FIRE = "http://localhost:8081/api/v1/auth/seach/fireEvent";
 	String URL_INDX_EVENT_FIRE = "http://localhost:8092/seach/fireEvent";
+
+	String NESTED = "nested";
+	String PATH = "path";
 }

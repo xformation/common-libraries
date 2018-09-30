@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
@@ -1214,44 +1215,55 @@ public interface IUtils {
 	 * @throws JSONException
 	 */
 	static JSONObject deepMerge(JSONObject source, JSONObject target) {
-		if (!IUtils.isNull(source) && !IUtils.isNull(target)) {
+		return deepMerge(source, target, false);
+	}
+
+	static JSONObject deepMerge(JSONObject src, JSONObject tar, boolean isNested) {
+		if (!IUtils.isNull(src) && !IUtils.isNull(tar)) {
 			@SuppressWarnings("rawtypes")
-			Iterator keys = source.keys();
+			Iterator keys = src.keys();
 			while (keys.hasNext()) {
 				try {
 					String key = (String) keys.next();
-					Object value = source.get(key);
-					if (!target.has(key)) {
+					Object value = src.get(key);
+					if (!tar.has(key)) {
 						// new value for "key":
-						target.put(key, value);
+						tar.put(key, value);
 					} else {
-						target.put(key, getMergedValue(value, target.opt(key)));
+						if (isNested && IConsts.PATH.equals(key) &&
+								!Objects.equals(value, tar.opt(key))) {
+							logger.warn("INVALID NESTED query for different paths, "
+									+ "may produce invalid result.");
+						}
+						tar.put(key, getMergedValue(value,
+								tar.opt(key), IConsts.NESTED.equals(key)));
 					}
 				} catch(JSONException je) {
 					logger.error(je.getMessage(), je);
 				}
 			}
 		} else {
-			if (!IUtils.isNull(source)) {
-				return source;
+			if (!IUtils.isNull(src)) {
+				return src;
 			}
 		}
-		return target;
+		return tar;
 	}
 
 	/**
 	 * Method to merge src and tar values for output value.
 	 * @param src
 	 * @param tar
+	 * @param isNested 
 	 * @return
 	 */
-	static Object getMergedValue(Object src, Object tar) {
+	static Object getMergedValue(Object src, Object tar, boolean isNested) {
 		if (!IUtils.isNull(src) && !IUtils.isNull(tar)) {
 			Object merged = null;
 			if (src instanceof JSONArray && tar instanceof JSONArray) {
 				merged = mergeJsonArrays((JSONArray) src, (JSONArray) tar);
 			} else if (src instanceof JSONObject && tar instanceof JSONObject) {
-				merged = deepMerge((JSONObject) src, (JSONObject) tar);
+				merged = deepMerge((JSONObject) src, (JSONObject) tar, isNested);
 			} else {
 				if (src.equals(tar)) {
 					merged = src;

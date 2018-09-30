@@ -15,6 +15,8 @@ import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.synectiks.commons.utils.IUtils;
 
@@ -23,6 +25,12 @@ import com.synectiks.commons.utils.IUtils;
  */
 @Configuration
 public class Config {
+
+
+	@Bean
+	public MultipartResolver getMultipartResolver() {
+		return new CommonsMultipartResolver();
+	}
 
 	@Bean
 	public RestTemplate restTemplate() {
