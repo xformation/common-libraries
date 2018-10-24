@@ -41,7 +41,7 @@ public class Policy extends Entity {
 	private static final long serialVersionUID = -6631676861385312561L;
 
 	private String name;
-	private List<Rule> rules;
+	private List<String> rules;
 	private String description;
 
 	public Policy() {
@@ -70,11 +70,11 @@ public class Policy extends Entity {
 		this.description = description;
 	}
 
-	public List<Rule> getRules() {
+	public List<String> getRules() {
 		return rules;
 	}
 
-	public void setRules(List<Rule> rules) {
+	public void setRules(List<String> rules) {
 		this.rules = rules;
 	}
 

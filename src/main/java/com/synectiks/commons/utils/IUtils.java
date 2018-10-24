@@ -57,6 +57,10 @@ import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.xcontent.ToXContent;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +97,9 @@ public interface IUtils {
 			.setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
 			.setDateFormat(new SimpleDateFormat(IConsts.JSON_DATE_FORMAT))
 			.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
-			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+			.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
 
 	static HttpServletRequest asHttp(ServletRequest req) {
 		return (HttpServletRequest) req;
@@ -1360,5 +1366,25 @@ public interface IUtils {
 			res = sb.toString();
 		}
 		return res;
+	}
+
+	/**
+	 * Method to translate xContent into json object.
+	 * @param xContent
+	 * @return
+	 */
+	static String convertXContentToJson(ToXContent xContent) {
+		if (!IUtils.isNull(xContent)) {
+	        try {
+	            XContentBuilder builder = XContentFactory.jsonBuilder().prettyPrint();
+	            builder.startObject();
+	            xContent.toXContent(builder, SearchResponse.EMPTY_PARAMS);
+	            builder.endObject();
+	            return builder.string();
+	        } catch (Exception e) {
+	            logger.error(e.getMessage(), e);
+	        }
+		}
+		return null;
 	}
 }

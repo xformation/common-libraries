@@ -92,6 +92,9 @@ public interface IConsts {
 	String PRM_FLD_ONLY = "fieldsOnly";
 	String PRM_MAPPINGS = "mappings";
 	String PRM_VALUE = "value";
+	String PRM_QUERY = "query";
+	String PRM_PAGE = "pageNo";
+	String PRM_PAGE_SIZE = "pageSize";
 
 	String KEY_SEARCH_URL = "synectiks.search.url";
 	String KEY_INDX_EVENT_FIRE = "search.fire.event.url";
