@@ -36,6 +36,22 @@ public class PolicyRuleResult implements Serializable {
 	private boolean timeOut;
 	private boolean terminatedEarly;
 
+	public String getPolicyId() {
+		return policyId;
+	}
+
+	public void setPolicyId(String policyId) {
+		this.policyId = policyId;
+	}
+
+	public String getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(String ruleId) {
+		this.ruleId = ruleId;
+	}
+
 	public String getScrollId() {
 		return scrollId;
 	}
