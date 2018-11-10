@@ -16,7 +16,6 @@ import com.synectiks.commons.utils.IUtils;
 
 /**
  * @author Rajesh
- *
  */
 public class JsonDateConverter implements DynamoDBTypeConverter<Date, String> {
 

@@ -21,6 +21,7 @@ public interface IDBConsts {
 	String Tbl_SUBSCRIBE = "Subscribe";
 	String Tbl_USERS = "Users";
 	String Tbl_Policy = "Policy";
+	String Tbl_Result = "Result";
 	String Tbl_Rule = "Rule";
 
 	String Col_DESC = "description";

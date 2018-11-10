@@ -12,9 +12,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.synectiks.commons.utils.IUtils;
 
 /**
- *  Base classes for DynamoDB type converters
+ * Base classes for DynamoDB type converters
  * @author Rajesh
- *
  */
 public abstract class StringArrayConverter<T> extends StringConverter<T> {
 

@@ -3,20 +3,25 @@
  */
 package com.synectiks.commons.converters;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.synectiks.commons.utils.IUtils;
 
 /**
- *  Base classes for DynamoDB type converters
+ * Base classes for DynamoDB type converters
  * @author Rajesh
- *
  */
 public abstract class StringConverter<T> implements DynamoDBTypeConverter<String, T> {
 
 	protected static Logger logger = LoggerFactory.getLogger(StringConverter.class);
+	
+	public static TypeReference<List<String>> strList = new TypeReference<List<String>>(){};
+	
 	protected Class<T> cls;
 
 	public StringConverter(Class<T> clazz) {
