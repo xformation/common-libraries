@@ -61,6 +61,8 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.xcontent.ToXContent;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +84,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.synectiks.commons.constants.IConsts;
+import com.synectiks.commons.entities.PolicyRuleResult;
 import com.synectiks.commons.entities.dynamodb.Entity;
 import com.synectiks.commons.entities.oak.OakFileNode;
 
@@ -1386,5 +1389,57 @@ public interface IUtils {
 	        }
 		}
 		return null;
+	}
+
+	/**
+	 * Convert string to json object.
+	 * @param str
+	 * @return
+	 */
+	static JSONObject getJSONObject(String str) {
+		if (!isNullOrEmpty(str)) {
+			try {
+				return new JSONObject(str);
+			} catch (JSONException e) {
+				// ignore it.
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Method to extract hit elastic search ids.
+	 * @param res 
+	 * @param hits
+	 * @return
+	 */
+	static void setResultHitIds(PolicyRuleResult res, SearchHits hits) {
+		if (!isNull(hits) && hits.getTotalHits() > 0) {
+			res.setTotalHits(hits.getTotalHits());
+			List<String> ids = new ArrayList<>();
+			for (SearchHit hit : hits.getHits()) {
+				ids.add(hit.getId());
+			}
+			res.setHits(ids);
+		}
+	}
+
+	/**
+	 * Method to copy properties into new SearchHitsResponse object.
+	 * @param sRes
+	 * @return
+	 */
+	static PolicyRuleResult createFromSearchResponse(SearchResponse sRes) {
+		PolicyRuleResult res = new PolicyRuleResult();
+		if (!isNull(sRes)) {
+			setResultHitIds(res, sRes.getHits());
+			res.setScrollId(sRes.getScrollId());
+			if (!isNull(sRes.isTerminatedEarly())) {
+				res.setTerminatedEarly(sRes.isTerminatedEarly());
+			}
+			res.setTimeOut(sRes.isTimedOut());
+			res.setTookInMillis(sRes.getTookInMillis());
+		}
+		return res;
 	}
 }
