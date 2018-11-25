@@ -58,6 +58,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.Strings;
 import org.elasticsearch.common.xcontent.ToXContent;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
@@ -1383,7 +1384,7 @@ public interface IUtils {
 	            builder.startObject();
 	            xContent.toXContent(builder, SearchResponse.EMPTY_PARAMS);
 	            builder.endObject();
-	            return builder.string();
+	            return Strings.toString(builder);
 	        } catch (Exception e) {
 	            logger.error(e.getMessage(), e);
 	        }
@@ -1438,7 +1439,7 @@ public interface IUtils {
 				res.setTerminatedEarly(sRes.isTerminatedEarly());
 			}
 			res.setTimeOut(sRes.isTimedOut());
-			res.setTookInMillis(sRes.getTookInMillis());
+			res.setTookInMillis(sRes.getTook().millis());
 		}
 		return res;
 	}

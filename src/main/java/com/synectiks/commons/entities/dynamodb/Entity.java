@@ -8,7 +8,6 @@ import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldIndex;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
@@ -18,7 +17,7 @@ public abstract class Entity implements Serializable {
 
 	private static final long serialVersionUID = -6637412247017015975L;
 
-	@Field(type = FieldType.String, index = FieldIndex.not_analyzed)
+	@Field(type = FieldType.Text, index = false)
 	protected String id;
 
 	protected Date createdAt;
