@@ -38,15 +38,15 @@ public class SourceMapping {
 	public static JSONObject getSourceEntityMapping() {
 		StringBuilder srcDynMap = new StringBuilder();
 		srcDynMap.append("{");
-		srcDynMap.append("	\"_timestamp\": {");
-		srcDynMap.append("		\"enabled\": \"true\"");
-		srcDynMap.append("	}, ");
+		srcDynMap.append("	" + getDynamicDateFormats() + ", ");
 		srcDynMap.append("\"dynamic_templates\": [");
 		srcDynMap.append(getNestedMapping());
 		srcDynMap.append(", ");
 		srcDynMap.append(getIdMappingSyntax());
 		srcDynMap.append(", ");
 		srcDynMap.append(getDateMappingSyntax());
+		srcDynMap.append(", ");
+		srcDynMap.append(getStringMappingSyntax());
 		srcDynMap.append("	]");
 		srcDynMap.append("}");
 		JSONObject mappings = null;
@@ -84,13 +84,28 @@ public class SourceMapping {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("	\"dates_ignore_malformed\": {");
-		sb.append("		\"match_mapping_type\": \"date|string\",");
+		sb.append("		\"match_mapping_type\": \"date\",");
 		sb.append("		\"match_pattern\": \"regex\",");
-		sb.append("		\"path_match\": \".*(date|Date|_at|_At|_AT|dob|DOB|Dob)$\",");
+		sb.append("		\"path_match\": \".*(\\.)?.*\",");
 		sb.append("		\"mapping\": {");
 		sb.append("			\"type\": \"date\",");
-		sb.append("			\"ignore_malformed\": true,");
-		sb.append("			\"format\": \"" + getDFs(" || ", false) + "\"");
+		sb.append("			\"ignore_malformed\": true");
+		sb.append("		}");
+		sb.append("	}");
+		sb.append("}");
+		return sb.toString();
+	}
+
+	private static String getStringMappingSyntax() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("	\"strings_ignore_malformed\": {");
+		sb.append("		\"match_mapping_type\": \"string\",");
+		sb.append("		\"match_pattern\": \"regex\",");
+		sb.append("		\"path_match\": \".*(\\.)?.*(date|Date|_at|_At|_AT|dob|DOB|Dob)$\",");
+		sb.append("		\"mapping\": {");
+		sb.append("			\"type\": \"date\",");
+		sb.append("			\"ignore_malformed\": true");
 		sb.append("		}");
 		sb.append("	}");
 		sb.append("}");
@@ -105,8 +120,7 @@ public class SourceMapping {
 		sb.append("		\"mapping\": {");
 		sb.append("			\"type\": \"nested\",");
 		sb.append("			\"dynamic\": true,");
-		sb.append("			\"date_detection\": true,");
-		sb.append("			" + getDynamicDateFormats());
+		sb.append("			\"date_detection\": true");
 		sb.append("		}");
 		sb.append("	}");
 		sb.append("}");
@@ -119,7 +133,7 @@ public class SourceMapping {
 		sb.append("	\"id_as_keywords\": {");
 		sb.append("		\"match_mapping_type\": \"string\",");
 		sb.append("		\"match_pattern\": \"regex\",");
-		sb.append("		\"match\": \".*(id|Id|Ids|ID)$\",");
+		sb.append("		\"match\": \".*(\\.)?.*(id|Id|Ids|ID)$\",");
 		sb.append("		\"mapping\": {");
 		sb.append("			\"type\": \"string\",");
 		sb.append("			\"index\": \"not_analyzed\",");
