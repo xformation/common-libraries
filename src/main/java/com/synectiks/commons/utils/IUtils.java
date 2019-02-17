@@ -1119,11 +1119,13 @@ public interface IUtils {
 
 	/**
 	 * Method creates a map from list of key value string or objects
+	 * @param <T>
 	 * @param keyValPairs array of string, object, string, object
 	 * @return
 	 */
-	static Map<String, Object> getRestParamMap(Object... keyValPairs) {
-		Map<String, Object> map = new HashMap<>();
+	@SafeVarargs
+	static <T> Map<String, T> getRestParamMap(T... keyValPairs) {
+		Map<String, T> map = new HashMap<>();
 		if (!isNull(keyValPairs) && (keyValPairs.length % 2) == 0) {
 			for (int i = 0; (i + 1) < keyValPairs.length;) {
 				String key = (String) keyValPairs[i++];
@@ -1442,5 +1444,47 @@ public interface IUtils {
 			res.setTookInMillis(sRes.getTook().millis());
 		}
 		return res;
+	}
+
+	/**
+	 * Method parse an String as integer and return -1 if fails.
+	 * @param val
+	 * @return
+	 */
+	static int parseInt(String val) {
+		try {
+			return Integer.parseInt(val);
+		} catch (Exception ex) {
+			// Ignore it
+		}
+		return -1;
+	}
+
+	/**
+	 * Method to convert first letter of word in cap if isCaps true
+	 * else convert into lower case
+	 * @param input
+	 * @param isCaps send true to make it in caps
+	 * @return
+	 */
+	static String changeFirstCharCaseOfWords(String input, boolean isCaps) {
+		if (!isNullOrEmpty(input)) {
+			StringBuilder sb = new StringBuilder();
+			char ch = ' ';
+			for (int i = 0; i < input.length(); i++) {
+				if (ch == ' ' && input.charAt(i) != ' ') {
+					if (isCaps) {
+						sb.append(Character.toUpperCase(input.charAt(i)));
+					} else {
+						sb.append(Character.toLowerCase(input.charAt(i)));
+					}
+				} else {
+					sb.append(input.charAt(i));
+				}
+				ch = input.charAt(i);
+			}
+			return sb.toString().trim();
+		}
+		return null;
 	}
 }
