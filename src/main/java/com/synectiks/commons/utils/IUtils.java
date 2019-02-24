@@ -123,9 +123,7 @@ public interface IUtils {
 	 * @return
 	 */
 	static boolean isNull(Object object) {
-		if (null == object)
-			return true;
-		return false;
+		return null == object;
 	}
 
 	/**
@@ -239,7 +237,7 @@ public interface IUtils {
 	 */
 	static List<String> getListFromString(String input, String delim) {
 		List<String> lst = new ArrayList<>();
-		delim = ((IUtils.isNullOrEmpty(delim)) ? IConsts.DELIM_COMMA : delim);
+		delim = ((isNullOrEmpty(delim)) ? IConsts.DELIM_COMMA : delim);
 		if (!isNullOrEmpty(input)) {
 			StringTokenizer token = new StringTokenizer(input, delim);
 			while (token.hasMoreTokens()) {
