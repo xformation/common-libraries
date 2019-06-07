@@ -86,6 +86,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.synectiks.commons.constants.IConsts;
 import com.synectiks.commons.entities.PolicyRuleResult;
+import com.synectiks.commons.entities.SurveyEntity;
 import com.synectiks.commons.entities.dynamodb.Entity;
 import com.synectiks.commons.entities.oak.OakFileNode;
 
@@ -1484,5 +1485,20 @@ public interface IUtils {
 			return sb.toString().trim();
 		}
 		return null;
+	}
+
+	/**
+	 * Method to generate value text object for surveyjs dropdown
+	 * @param list
+	 * @return list of objects like {value: #id, text: #name}
+	 */
+	static List<SurveyEntity> getValueTextForSurveyjs(List<? extends Entity> list) {
+		List<SurveyEntity> lst = new ArrayList<>();
+		if (!isNull(list) && list.size() > 0) {
+			list.forEach((entity) -> {
+				lst.add(new SurveyEntity(entity.getId(), entity.getName()));
+			});
+		}
+		return lst;
 	}
 }

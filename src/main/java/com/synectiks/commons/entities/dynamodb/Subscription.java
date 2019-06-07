@@ -34,6 +34,11 @@ public class Subscription extends Entity implements IESEntity {
 		return id;
 	}
 
+	@Override
+	public String getName() {
+		return serviceId;
+	}
+
 	public String getServiceId() {
 		return serviceId;
 	}

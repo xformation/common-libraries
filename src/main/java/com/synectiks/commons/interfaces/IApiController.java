@@ -3,11 +3,17 @@
  */
 package com.synectiks.commons.interfaces;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.synectiks.commons.constants.IConsts;
+import com.synectiks.commons.entities.SurveyEntity;
+import com.synectiks.commons.entities.dynamodb.Entity;
+import com.synectiks.commons.utils.IUtils;
 
 /**
  * @author Rajesh
@@ -83,4 +89,22 @@ public interface IApiController {
 	 * @return
 	 */
 	ResponseEntity<Object> delete(ObjectNode entity);
+
+	/**
+	 * Method to check query parameter if its 'surveyjs' returns
+	 * {@link SurveyEntity} object.
+	 * @param request
+	 * @param list
+	 * @return
+	 */
+	default List<?> getSurveyEntityResult(HttpServletRequest request,
+			List<? extends Entity> list) {
+		List<?> entities = list;
+		String qry = request.getParameter(IConsts.PRM_QUERY);
+		if (!IUtils.isNullOrEmpty(qry) &&
+				IConsts.SURVEYJS.equals(qry.toLowerCase())) {
+			entities = IUtils.getValueTextForSurveyjs(list);
+		}
+		return entities;
+	}
 }

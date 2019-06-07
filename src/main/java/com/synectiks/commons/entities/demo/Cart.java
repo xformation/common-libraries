@@ -37,6 +37,11 @@ public class Cart extends Entity implements IESEntity {
 		return id;
 	}
 
+	@Override
+	public String getName() {
+		return customerId;
+	}
+
 	public List<String> getCartItems() {
 		return cartItems;
 	}

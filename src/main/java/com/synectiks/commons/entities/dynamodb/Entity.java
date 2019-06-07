@@ -32,6 +32,8 @@ public abstract class Entity implements Serializable {
 
 	public abstract String getId();
 
+	public abstract String getName();
+
 	public void setId(String id) {
 		this.id = id;
 	}

@@ -37,6 +37,11 @@ public class BillingAddress extends Entity implements IESEntity {
 		return id;
 	}
 
+	@Override
+	public String getName() {
+		return cardHolder;
+	}
+
 	public String getCardHolder() {
 		return cardHolder;
 	}

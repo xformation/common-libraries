@@ -38,6 +38,11 @@ public class PolicyRuleResult extends Entity {
 		return id;
 	}
 
+	@Override
+	public String getName() {
+		return scrollId;
+	}
+
 	public String getPolicyId() {
 		return policyId;
 	}

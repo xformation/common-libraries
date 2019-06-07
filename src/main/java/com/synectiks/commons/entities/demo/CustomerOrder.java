@@ -34,6 +34,11 @@ public class CustomerOrder extends Entity implements IESEntity {
 		return id;
 	}
 
+	@Override
+	public String getName() {
+		return cartId;
+	}
+
 	public String getCartId() {
 		return cartId;
 	}

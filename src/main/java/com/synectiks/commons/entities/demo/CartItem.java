@@ -35,6 +35,11 @@ public class CartItem extends Entity implements IESEntity {
 		return id;
 	}
 
+	@Override
+	public String getName() {
+		return productId;
+	}
+
 	@DynamoDBIndexHashKey(globalSecondaryIndexName = "indx_Cart_ProductId")
 	public String getProductId() {
 		return productId;

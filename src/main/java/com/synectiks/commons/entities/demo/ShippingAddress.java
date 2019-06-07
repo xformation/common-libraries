@@ -39,6 +39,11 @@ public class ShippingAddress extends Entity implements IESEntity {
 		return id;
 	}
 
+	@Override
+	public String getName() {
+		return customerId;
+	}
+
 	public String getCustomerId() {
 		return customerId;
 	}

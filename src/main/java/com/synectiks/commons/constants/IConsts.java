@@ -103,4 +103,5 @@ public interface IConsts {
 
 	String NESTED = "nested";
 	String PATH = "path";
+	String SURVEYJS = "surveyjs";
 }
