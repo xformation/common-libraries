@@ -94,6 +94,8 @@ public interface IConsts {
 	String PRM_VALUE = "value";
 	String PRM_QUERY = "query";
 	String PRM_PAGE = "pageNo";
+	String PRM_NOT_ONLY_IDS = "notOnlyIds";
+	String PRM_RES_AS_PSR = "asPolicyRuleRes";
 	String PRM_PAGE_SIZE = "pageSize";
 
 	String KEY_SEARCH_URL = "synectiks.search.url";

@@ -1427,14 +1427,39 @@ public interface IUtils {
 	}
 
 	/**
-	 * Method to copy properties into new SearchHitsResponse object.
-	 * @param sRes
+	 * Method to extract hit elastic search ids.
+	 * @param res 
+	 * @param hits
 	 * @return
 	 */
-	static PolicyRuleResult createFromSearchResponse(SearchResponse sRes) {
+	static void setResults(PolicyRuleResult res, SearchHits hits) {
+		if (!isNull(hits) && hits.getTotalHits() > 0) {
+			res.setTotalHits(hits.getTotalHits());
+			List<String> lst = new ArrayList<>();
+			for (SearchHit hit : hits.getHits()) {
+				lst.add(
+						IUtils.getJSONObject(
+								hit.getSourceAsString()).toString());
+			}
+			res.setHits(lst);
+		}
+	}
+
+	/**
+	 * Method to copy properties into new SearchHitsResponse object.
+	 * @param sRes
+	 * @param asPSR 
+	 * @return
+	 */
+	static PolicyRuleResult createFromSearchResponse(
+			SearchResponse sRes, boolean asPSR) {
 		PolicyRuleResult res = new PolicyRuleResult();
 		if (!isNull(sRes)) {
-			setResultHitIds(res, sRes.getHits());
+			if (asPSR) {
+				setResults(res, sRes.getHits());
+			} else {
+				setResultHitIds(res, sRes.getHits());
+			}
 			res.setScrollId(sRes.getScrollId());
 			if (!isNull(sRes.isTerminatedEarly())) {
 				res.setTerminatedEarly(sRes.isTerminatedEarly());
