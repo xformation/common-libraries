@@ -17,6 +17,7 @@ public interface IDBConsts {
 	String Tbl_RESOURCE = "Resource";
 	String Tbl_ROLES = "Roles";
 	String Tbl_SERVICE = "Service";
+	String Tbl_SSM = "SSMachine";
 	String Tbl_SSM_STATE = "SSMState";
 	String Tbl_SUBSCRIBE = "Subscribe";
 	String Tbl_USERS = "Users";
