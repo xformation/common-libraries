@@ -1247,7 +1247,7 @@ public interface IUtils {
 									+ "may produce invalid result.");
 						}
 						tar.put(key, getMergedValue(value,
-								tar.opt(key), IConsts.NESTED.equals(key)));
+								tar.opt(key), isNested || IConsts.NESTED.equals(key)));
 					}
 				} catch(JSONException je) {
 					logger.error(je.getMessage(), je);
