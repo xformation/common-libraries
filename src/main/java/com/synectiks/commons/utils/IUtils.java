@@ -80,6 +80,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -102,7 +104,9 @@ public interface IUtils {
 			.setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
 			.setDateFormat(new SimpleDateFormat(IConsts.JSON_DATE_FORMAT))
 			.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
-			.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+			.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
+			.configure(JsonGenerator.Feature.QUOTE_FIELD_NAMES, false)
+			.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 			.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
 
