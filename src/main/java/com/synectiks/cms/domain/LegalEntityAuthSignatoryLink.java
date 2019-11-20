@@ -2,6 +2,7 @@ package com.synectiks.cms.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -161,6 +162,11 @@ public class LegalEntityAuthSignatoryLink implements Serializable, IESEntity {
 		this.dateOfIncorporation = dateOfIncorporation;
 	}
 
+	public void setDateOfIncorporation(String date) {
+		this.dateOfIncorporation = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public String getRegisteredOfficeAddress() {
 		return registeredOfficeAddress;
 	}
@@ -280,6 +286,11 @@ public class LegalEntityAuthSignatoryLink implements Serializable, IESEntity {
 		this.pfRegistrationDate = pfRegistrationDate;
 	}
 
+	public void setPfRegistrationDate(String date) {
+		this.pfRegistrationDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public Long getPfSignatory() {
 		return pfSignatory;
 	}
@@ -320,6 +331,11 @@ public class LegalEntityAuthSignatoryLink implements Serializable, IESEntity {
 		this.esiRegistrationDate = esiRegistrationDate;
 	}
 
+	public void setEsiRegistrationDate(String date) {
+		this.esiRegistrationDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public Long getEsiSignatory() {
 		return esiSignatory;
 	}
@@ -357,6 +373,11 @@ public class LegalEntityAuthSignatoryLink implements Serializable, IESEntity {
 
 	public void setPtRegistrationDate(LocalDate ptRegistrationDate) {
 		this.ptRegistrationDate = ptRegistrationDate;
+	}
+
+	public void setPtRegistrationDate(String date) {
+		this.ptRegistrationDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public Long getPtSignatory() {

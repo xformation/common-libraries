@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -91,6 +92,11 @@ public class ExceptionRecord implements Serializable, IESEntity {
 
 	public void setExceptionDate(LocalDate exceptionDate) {
 		this.exceptionDate = exceptionDate;
+	}
+
+	public void setExceptionDate(String date) {
+		this.exceptionDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getUser() {

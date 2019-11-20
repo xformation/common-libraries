@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -340,6 +341,11 @@ public class Teacher implements Serializable, IESEntity {
 
 	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	public void setDateOfBirth(String date) {
+		this.dateOfBirth = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getPlaceOfBirth() {
@@ -802,4 +808,61 @@ public class Teacher implements Serializable, IESEntity {
 				+ ", designation='" + getDesignation() + "'" + ", staffType='"
 				+ getStaffType() + "'" + "}";
 	}
+
+	//Additional computation fields
+	private String attendanceRate;
+	private String assignEffic;
+	private String studentFeedback;
+	private String parentFeedback;
+	private String studentAvgScore;
+	private String responsiveIndex;
+
+	public String getAttendanceRate() {
+		return attendanceRate;
+	}
+
+	public void setAttendanceRate(String attendanceRate) {
+		this.attendanceRate = attendanceRate;
+	}
+
+	public String getAssignEffic() {
+		return assignEffic;
+	}
+
+	public void setAssignEffic(String assignEffic) {
+		this.assignEffic = assignEffic;
+	}
+
+	public String getStudentFeedback() {
+		return studentFeedback;
+	}
+
+	public void setStudentFeedback(String studentFeedback) {
+		this.studentFeedback = studentFeedback;
+	}
+
+	public String getParentFeedback() {
+		return parentFeedback;
+	}
+
+	public void setParentFeedback(String parentFeedback) {
+		this.parentFeedback = parentFeedback;
+	}
+
+	public String getStudentAvgScore() {
+		return studentAvgScore;
+	}
+
+	public void setStudentAvgScore(String studentAvgScore) {
+		this.studentAvgScore = studentAvgScore;
+	}
+
+	public String getResponsiveIndex() {
+		return responsiveIndex;
+	}
+
+	public void setResponsiveIndex(String responsiveIndex) {
+		this.responsiveIndex = responsiveIndex;
+	}
+	
 }

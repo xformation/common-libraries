@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -131,6 +132,11 @@ public class Invoice implements Serializable, IESEntity {
 		this.paymentDate = paymentDate;
 	}
 
+	public void setPaymentDate(String date) {
+		this.paymentDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public LocalDate getNextPaymentDate() {
 		return nextPaymentDate;
 	}
@@ -142,6 +148,11 @@ public class Invoice implements Serializable, IESEntity {
 
 	public void setNextPaymentDate(LocalDate nextPaymentDate) {
 		this.nextPaymentDate = nextPaymentDate;
+	}
+
+	public void setNextPaymentDate(String date) {
+		this.nextPaymentDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public Long getOutStandingAmount() {
@@ -259,6 +270,11 @@ public class Invoice implements Serializable, IESEntity {
 
 	public void setUpdatedOn(LocalDate updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public void setUpdatedOn(String date) {
+		this.updatedOn = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public FeeCategory getFeeCategory() {

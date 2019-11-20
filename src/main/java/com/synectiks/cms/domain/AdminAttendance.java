@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -66,6 +67,11 @@ public class AdminAttendance implements Serializable, IESEntity {
 
 	public void setUpdatedOn(LocalDate updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public void setUpdateOn(String date) {
+		this.updatedOn = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getUpdatedBy() {

@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -63,6 +64,11 @@ public class Lecture implements Serializable, IESEntity {
 		this.lecDate = lecDate;
 	}
 
+	public void setLecDate(String date) {
+		this.lecDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public LocalDate getLastUpdatedOn() {
 		return lastUpdatedOn;
 	}
@@ -74,6 +80,11 @@ public class Lecture implements Serializable, IESEntity {
 
 	public void setLastUpdatedOn(LocalDate lastUpdatedOn) {
 		this.lastUpdatedOn = lastUpdatedOn;
+	}
+
+	public void setLastUpdatedOn(String date) {
+		this.lastUpdatedOn = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getLastUpdatedBy() {

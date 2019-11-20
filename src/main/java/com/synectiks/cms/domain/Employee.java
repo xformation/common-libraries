@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -137,6 +138,11 @@ public class Employee implements Serializable, IESEntity {
 		this.joiningDate = joiningDate;
 	}
 
+	public void setJoiningDate(String date) {
+		this.joiningDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public LocalDate getJobEndDate() {
 		return jobEndDate;
 	}
@@ -148,6 +154,11 @@ public class Employee implements Serializable, IESEntity {
 
 	public void setJobEndDate(LocalDate jobEndDate) {
 		this.jobEndDate = jobEndDate;
+	}
+
+	public void setJobEndDate(String date) {
+		this.jobEndDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public LocalDate getResignationDate() {
@@ -163,6 +174,11 @@ public class Employee implements Serializable, IESEntity {
 		this.resignationDate = resignationDate;
 	}
 
+	public void setResignationDate(String date) {
+		this.resignationDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public LocalDate getResignationAcceptanceDate() {
 		return resignationAcceptanceDate;
 	}
@@ -174,6 +190,11 @@ public class Employee implements Serializable, IESEntity {
 
 	public void setResignationAcceptanceDate(LocalDate resignationAcceptanceDate) {
 		this.resignationAcceptanceDate = resignationAcceptanceDate;
+	}
+
+	public void setResignationAcceptanceDate(String date) {
+		this.resignationAcceptanceDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getAadharNo() {
@@ -369,6 +390,11 @@ public class Employee implements Serializable, IESEntity {
 
 	public void setDrivingLicenceValidity(LocalDate drivingLicenceValidity) {
 		this.drivingLicenceValidity = drivingLicenceValidity;
+	}
+
+	public void setDrivingLicenceValidity(String date) {
+		this.drivingLicenceValidity = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getGender() {

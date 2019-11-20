@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -140,6 +141,11 @@ public class Vehicle implements Serializable, IESEntity {
 
 	public void setDateOfRegistration(LocalDate dateOfRegistration) {
 		this.dateOfRegistration = dateOfRegistration;
+	}
+
+	public void setDateOfRegistration(String date) {
+		this.dateOfRegistration = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getYearOfManufacturing() {

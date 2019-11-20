@@ -2,6 +2,7 @@ package com.synectiks.cms.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -119,6 +120,11 @@ public class AcademicExamSetting implements Serializable, IESEntity {
 
 	public void setExamDate(LocalDate examDate) {
 		this.examDate = examDate;
+	}
+
+	public void setExamDate(String examDate) {
+		this.examDate = LocalDate.parse(examDate,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getStartTime() {

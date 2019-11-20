@@ -4,6 +4,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -65,6 +66,11 @@ public class Book implements Serializable, IESEntity {
         this.issueDate = issueDate;
     }
 
+	public void setIssueDate(String date) {
+		this.issueDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
     public LocalDate getDueDate() {
         return dueDate;
     }
@@ -77,6 +83,11 @@ public class Book implements Serializable, IESEntity {
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
+
+	public void setDueDate(String date) {
+		this.dueDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
 
     public Integer getNoOfCopiesAvailable() {
         return noOfCopiesAvailable;
@@ -116,6 +127,11 @@ public class Book implements Serializable, IESEntity {
     public void setReceivedDate(LocalDate receivedDate) {
         this.receivedDate = receivedDate;
     }
+
+	public void setReceivedDate(String date) {
+		this.receivedDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
 
     public Student getStudent() {
         return student;

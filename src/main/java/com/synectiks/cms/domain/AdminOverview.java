@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -79,6 +80,11 @@ public class AdminOverview implements Serializable, IESEntity {
 
 	public void setChooseDate(LocalDate chooseDate) {
 		this.chooseDate = chooseDate;
+	}
+
+	public void setChooseDate(String date) {
+		this.chooseDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getSection() {

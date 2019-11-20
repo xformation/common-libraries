@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -121,6 +122,11 @@ public class FeeCategory implements Serializable, IESEntity {
 		this.createdOn = createdOn;
 	}
 
+	public void setCreatedOn(String date) {
+		this.createdOn = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
@@ -147,6 +153,11 @@ public class FeeCategory implements Serializable, IESEntity {
 		this.updatedOn = updatedOn;
 	}
 
+	public void setUpdatedOn(String date) {
+		this.updatedOn = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public LocalDate getStartDate() {
 		return startDate;
 	}
@@ -160,6 +171,11 @@ public class FeeCategory implements Serializable, IESEntity {
 		this.startDate = startDate;
 	}
 
+	public void setStartDate(String date) {
+		this.startDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public LocalDate getEndDate() {
 		return endDate;
 	}
@@ -171,6 +187,11 @@ public class FeeCategory implements Serializable, IESEntity {
 
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
+	}
+
+	public void setEndDate(String date) {
+		this.endDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public Branch getBranch() {

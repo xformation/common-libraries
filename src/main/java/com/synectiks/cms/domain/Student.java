@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -302,6 +303,11 @@ public class Student implements Serializable, IESEntity {
 
 	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	public void setDateOfBirth(String dateOfBirth) {
+		this.dateOfBirth = LocalDate.parse(dateOfBirth,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getPlaceOfBirth() {
@@ -773,5 +779,88 @@ public class Student implements Serializable, IESEntity {
 				+ "'" + ", uploadPhoto='" + getUploadPhoto() + "'" + ", admissionNo="
 				+ getAdmissionNo() + ", rollNo='" + getRollNo() + "'" + ", studentType='"
 				+ getStudentType() + "'" + "}";
+	}
+
+	//Additional computation fields
+	private String attendance;
+	private String avgExamScore;
+	private String subject;
+	private String assignEffic;
+	private String collaborationEffic;
+	private String contributionEffic;
+	private String learningEffic;
+	private String extraCuriculEffic;
+	private String sportsIndex;
+
+	public String getAttendance() {
+		return attendance;
+	}
+
+	public void setAttendance(String attendance) {
+		this.attendance = attendance;
+	}
+
+	public String getAvgExamScore() {
+		return avgExamScore;
+	}
+
+	public void setAvgExamScore(String avgExamScore) {
+		this.avgExamScore = avgExamScore;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getAssignEffic() {
+		return assignEffic;
+	}
+
+	public void setAssignEffic(String assignEffic) {
+		this.assignEffic = assignEffic;
+	}
+
+	public String getCollaborationEffic() {
+		return collaborationEffic;
+	}
+
+	public void setCollaborationEffic(String collaborationEffic) {
+		this.collaborationEffic = collaborationEffic;
+	}
+
+	public String getContributionEffic() {
+		return contributionEffic;
+	}
+
+	public void setContributionEffic(String contributionEffic) {
+		this.contributionEffic = contributionEffic;
+	}
+
+	public String getLearningEffic() {
+		return learningEffic;
+	}
+
+	public void setLearningEffic(String learningEffic) {
+		this.learningEffic = learningEffic;
+	}
+
+	public String getExtraCuriculEffic() {
+		return extraCuriculEffic;
+	}
+
+	public void setExtraCuriculEffic(String extraCuriculEffic) {
+		this.extraCuriculEffic = extraCuriculEffic;
+	}
+
+	public String getSportsIndex() {
+		return sportsIndex;
+	}
+
+	public void setSportsIndex(String sportsIndex) {
+		this.sportsIndex = sportsIndex;
 	}
 }

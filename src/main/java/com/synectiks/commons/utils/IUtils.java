@@ -86,6 +86,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.synectiks.commons.constants.IConsts;
 import com.synectiks.commons.entities.PolicyRuleResult;
 import com.synectiks.commons.entities.SurveyEntity;
@@ -100,6 +101,7 @@ public interface IUtils {
 	Logger logger = LoggerFactory.getLogger(IUtils.class);
 
 	ObjectMapper OBJECT_MAPPER = new ObjectMapper()
+			.registerModule(new JavaTimeModule())
 			.setVisibility(PropertyAccessor.ALL, Visibility.NONE)
 			.setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
 			.setDateFormat(new SimpleDateFormat(IConsts.JSON_DATE_FORMAT))
@@ -108,6 +110,7 @@ public interface IUtils {
 			.configure(JsonGenerator.Feature.QUOTE_FIELD_NAMES, false)
 			.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
 			.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
 
 	static HttpServletRequest asHttp(ServletRequest req) {

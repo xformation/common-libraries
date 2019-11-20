@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -740,6 +741,11 @@ public class PaymentRequestResponse implements Serializable, IESEntity {
 
 	public void setRequestTxnDate(LocalDate requestTxnDate) {
 		this.requestTxnDate = requestTxnDate;
+	}
+
+	public void setRequestTxnDate(String date) {
+		this.requestTxnDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getRequestTxnTime() {

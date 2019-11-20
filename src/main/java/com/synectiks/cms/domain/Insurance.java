@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -86,6 +87,11 @@ public class Insurance implements Serializable, IESEntity {
 		this.dateOfInsurance = dateOfInsurance;
 	}
 
+	public void setDateOfInsurance(String date) {
+		this.dateOfInsurance = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public LocalDate getValidTill() {
 		return validTill;
 	}
@@ -97,6 +103,11 @@ public class Insurance implements Serializable, IESEntity {
 
 	public void setValidTill(LocalDate validTill) {
 		this.validTill = validTill;
+	}
+
+	public void setValidTill(String date) {
+		this.validTill = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public Vehicle getVehicle() {

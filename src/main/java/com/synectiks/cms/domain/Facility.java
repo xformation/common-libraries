@@ -2,6 +2,7 @@ package com.synectiks.cms.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -90,6 +91,11 @@ public class Facility implements Serializable, IESEntity {
 		this.startDate = startDate;
 	}
 
+	public void setStartDate(String date) {
+		this.startDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public LocalDate getEndDate() {
 		return endDate;
 	}
@@ -101,6 +107,11 @@ public class Facility implements Serializable, IESEntity {
 
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
+	}
+
+	public void setEndDate(String date) {
+		this.endDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public LocalDate getSuspandStartDate() {
@@ -116,6 +127,11 @@ public class Facility implements Serializable, IESEntity {
 		this.suspandStartDate = suspandStartDate;
 	}
 
+	public void setSuspandStartDate(String date) {
+		this.suspandStartDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public LocalDate getSuspandEndDate() {
 		return suspandEndDate;
 	}
@@ -127,6 +143,11 @@ public class Facility implements Serializable, IESEntity {
 
 	public void setSuspandEndDate(LocalDate suspandEndDate) {
 		this.suspandEndDate = suspandEndDate;
+	}
+
+	public void setSuspandEndDate(String date) {
+		this.suspandEndDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public AcademicYear getAcademicYear() {

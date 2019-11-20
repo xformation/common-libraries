@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -68,6 +69,11 @@ public class Holiday implements Serializable, IESEntity {
 
 	public void setHolidayDate(LocalDate holidayDate) {
 		this.holidayDate = holidayDate;
+	}
+
+	public void setHolidayDate(String date) {
+		this.holidayDate = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public String getHolidayStatus() {

@@ -3,6 +3,7 @@ package com.synectiks.cms.domain;
 //import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.validation.constraints.Size;
 
@@ -117,6 +118,11 @@ public class Notifications implements Serializable, IESEntity {
 		this.createdOn = createdOn;
 	}
 
+	public void setCreatedOn(String date) {
+		this.createdOn = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+	}
+
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
@@ -141,6 +147,11 @@ public class Notifications implements Serializable, IESEntity {
 
 	public void setUpdatedOn(LocalDate updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public void setUpdatedOn(String date) {
+		this.updatedOn = LocalDate.parse(date,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 	}
 
 	public AcademicYear getAcademicYear() {
