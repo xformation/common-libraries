@@ -30,6 +30,7 @@ public class ESEvent implements Serializable {
 
 	private EventType eventType;
 	private Object entity;
+	private String cls;
 
 	public ESEvent() {
 		
@@ -38,6 +39,7 @@ public class ESEvent implements Serializable {
 	public ESEvent(EventType type, Object entity) {
 		this.eventType = type;
 		this.entity = entity;
+		this.cls = entity.getClass().getName();
 	}
 
 	public EventType getEventType() {
@@ -54,6 +56,14 @@ public class ESEvent implements Serializable {
 
 	public void setEntity(Class<? extends IESEntity> entity) {
 		this.entity = entity;
+	}
+
+	public String getCls() {
+		return cls;
+	}
+
+	public void setCls(String clz) {
+		this.cls = clz;
 	}
 
 	/**
