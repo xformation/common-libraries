@@ -20,6 +20,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -87,6 +89,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.synectiks.commons.constants.IConsts;
 import com.synectiks.commons.entities.PolicyRuleResult;
 import com.synectiks.commons.entities.SurveyEntity;
@@ -101,8 +105,14 @@ public interface IUtils {
 	Logger logger = LoggerFactory.getLogger(IUtils.class);
 
 	ObjectMapper OBJECT_MAPPER = new ObjectMapper()
-			.registerModule(new JavaTimeModule())
-			.setVisibility(PropertyAccessor.ALL, Visibility.NONE)
+			.registerModule(new JavaTimeModule()
+					.addSerializer(LocalDate.class,
+							new LocalDateSerializer(
+									DateTimeFormatter.ofPattern("yyyy-M-d")))
+					.addDeserializer(LocalDate.class,
+							new LocalDateDeserializer(
+									DateTimeFormatter.ofPattern("yyyy-M-d"))))
+			//.setVisibility(PropertyAccessor.ALL, Visibility.NONE)
 			.setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
 			.setDateFormat(new SimpleDateFormat(IConsts.JSON_DATE_FORMAT))
 			.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
