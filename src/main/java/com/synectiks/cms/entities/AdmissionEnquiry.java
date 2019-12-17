@@ -1,29 +1,29 @@
 package com.synectiks.cms.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+//import org.springframework.data.elasticsearch.annotations.Document;
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import org.springframework.data.elasticsearch.annotations.Document;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
-
-import com.synectiks.cms.entities.enumeration.Gender;
-
-import com.synectiks.cms.entities.enumeration.CourseEnum;
-
-import com.synectiks.cms.entities.enumeration.ModeOfEnquiry;
 import com.synectiks.commons.interfaces.IESEntity;
-import com.synectiks.cms.entities.enumeration.EnquiryStatus;
+
 
 /**
  * A AdmissionEnquiry.
@@ -34,549 +34,477 @@ import com.synectiks.cms.entities.enumeration.EnquiryStatus;
 @Document(indexName = "admissionenquiry")
 public class AdmissionEnquiry implements Serializable, IESEntity {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-	@SequenceGenerator(name = "sequenceGenerator")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    private Long id;
 
-	@NotNull
-	@Column(name = "student_name", nullable = false)
-	private String studentName;
+    @Column(name = "student_name")
+    private String studentName;
 
-	@Column(name = "student_middle_name")
-	private String studentMiddleName;
+    @Column(name = "student_middle_name")
+    private String studentMiddleName;
 
-	@Column(name = "student_last_name")
-	private String studentLastName;
+    @Column(name = "student_last_name")
+    private String studentLastName;
 
-	@Column(name = "father_name")
-	private String fatherName;
+    @Column(name = "cell_phone_no")
+    private String cellPhoneNo;
 
-	@Column(name = "father_middle_name")
-	private String fatherMiddleName;
+    @Column(name = "land_line_phone_no")
+    private String landLinePhoneNo;
 
-	@Column(name = "father_last_name")
-	private String fatherLastName;
+    @Column(name = "email_id")
+    private String emailId;
 
-	@Column(name = "mother_name")
-	private String motherName;
-
-	@Column(name = "mother_middle_name")
-	private String motherMiddleName;
-
-	@Column(name = "mother_last_name")
-	private String motherLastName;
-
-	@NotNull
-	@Column(name = "contact_number", nullable = false)
-	private String contactNumber;
-
-	@Column(name = "alternate_mobile_number")
-	private String alternateMobileNumber;
-
-	@Column(name = "date_of_birth")
-	@JsonSerialize(using = LocalDateSerializer.class)
+    @Column(name = "date_of_birth")
+    @JsonSerialize(using = LocalDateSerializer.class)
 	@JsonDeserialize(using = LocalDateDeserializer.class)
-	private LocalDate dateOfBirth;
+    private LocalDate dateOfBirth;
 
-	@Column(name = "email")
-	private String email;
+    @Column(name = "gender")
+    private String gender;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "sex")
-	private Gender sex;
+    @Column(name = "highest_qualification")
+    private String highestQualification;
 
-	@NotNull
-	@Column(name = "comments", nullable = false)
-	private String comments;
+    @Column(name = "mode_of_enquiry")
+    private String modeOfEnquiry;
 
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(name = "course_applying_for", nullable = false)
-	private CourseEnum courseApplyingFor;
-
-	@NotNull
-	@Column(name = "highest_qualification", nullable = false)
-	private String highestQualification;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "mode_of_enquiry")
-	private ModeOfEnquiry modeOfEnquiry;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "status")
-	private EnquiryStatus status;
-
-	@Column(name = "description")
-	private String description;
-
-	@Column(name = "enquiry_date")
-	@JsonSerialize(using = LocalDateSerializer.class)
+    @Column(name = "enquiry_date")
+    @JsonSerialize(using = LocalDateSerializer.class)
 	@JsonDeserialize(using = LocalDateDeserializer.class)
-	private LocalDate enquiryDate;
+    private LocalDate enquiryDate;
 
-	@Column(name = "updated_on")
-	@JsonSerialize(using = LocalDateSerializer.class)
+    @Size(max = 5000)
+    @Column(name = "comments", length = 5000)
+    private String comments;
+
+    @Column(name = "branch_id")
+    private Long branchId;
+
+    @Column(name = "department_id")
+    private Long departmentId;
+
+    @Column(name = "course_id")
+    private Long courseId;
+
+    @Column(name = "semester_id")
+    private Long semesterId;
+
+    @Column(name = "batch_id")
+    private Long batchId;
+
+    @Column(name = "state_id")
+    private Long stateId;
+
+    @Column(name = "city_id")
+    private Long cityId;
+
+    @Column(name = "academic_year_id")
+    private Long academicYearId;
+
+    @Column(name = "enquiry_status")
+    private String enquiryStatus;
+
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "created_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
 	@JsonDeserialize(using = LocalDateDeserializer.class)
-	private LocalDate updatedOn;
-
-	@Column(name = "updated_by")
-	private String updatedBy;
-
-	@ManyToOne
-	@JsonIgnoreProperties("admissionEnquiries")
-	private Branch branch;
-
-	@ManyToOne
-	@JsonIgnoreProperties("admissionEnquiries")
-	private Department department;
-
-	@ManyToOne
-	@JsonIgnoreProperties("admissionEnquiries")
-	private Batch batch;
-
-	@ManyToOne
-	@JsonIgnoreProperties("admissionEnquiries")
-	private State state;
-
-	@ManyToOne
-	@JsonIgnoreProperties("admissionEnquiries")
-	private City city;
-
-	@ManyToOne
-	@JsonIgnoreProperties("admissionEnquiries")
-	private Country country;
-
-	// jhipster-needle-entity-add-field - JHipster will add fields here, do not
-	// remove
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getStudentName() {
-		return studentName;
-	}
-
-	public AdmissionEnquiry studentName(String studentName) {
-		this.studentName = studentName;
-		return this;
-	}
-
-	public void setStudentName(String studentName) {
-		this.studentName = studentName;
-	}
-
-	public String getStudentMiddleName() {
-		return studentMiddleName;
-	}
-
-	public AdmissionEnquiry studentMiddleName(String studentMiddleName) {
-		this.studentMiddleName = studentMiddleName;
-		return this;
-	}
-
-	public void setStudentMiddleName(String studentMiddleName) {
-		this.studentMiddleName = studentMiddleName;
-	}
-
-	public String getStudentLastName() {
-		return studentLastName;
-	}
-
-	public AdmissionEnquiry studentLastName(String studentLastName) {
-		this.studentLastName = studentLastName;
-		return this;
-	}
-
-	public void setStudentLastName(String studentLastName) {
-		this.studentLastName = studentLastName;
-	}
-
-	public String getFatherName() {
-		return fatherName;
-	}
-
-	public AdmissionEnquiry fatherName(String fatherName) {
-		this.fatherName = fatherName;
-		return this;
-	}
-
-	public void setFatherName(String fatherName) {
-		this.fatherName = fatherName;
-	}
-
-	public String getFatherMiddleName() {
-		return fatherMiddleName;
-	}
-
-	public AdmissionEnquiry fatherMiddleName(String fatherMiddleName) {
-		this.fatherMiddleName = fatherMiddleName;
-		return this;
-	}
-
-	public void setFatherMiddleName(String fatherMiddleName) {
-		this.fatherMiddleName = fatherMiddleName;
-	}
-
-	public String getFatherLastName() {
-		return fatherLastName;
-	}
-
-	public AdmissionEnquiry fatherLastName(String fatherLastName) {
-		this.fatherLastName = fatherLastName;
-		return this;
-	}
-
-	public void setFatherLastName(String fatherLastName) {
-		this.fatherLastName = fatherLastName;
-	}
-
-	public String getMotherName() {
-		return motherName;
-	}
-
-	public AdmissionEnquiry motherName(String motherName) {
-		this.motherName = motherName;
-		return this;
-	}
-
-	public void setMotherName(String motherName) {
-		this.motherName = motherName;
-	}
-
-	public String getMotherMiddleName() {
-		return motherMiddleName;
-	}
-
-	public AdmissionEnquiry motherMiddleName(String motherMiddleName) {
-		this.motherMiddleName = motherMiddleName;
-		return this;
-	}
-
-	public void setMotherMiddleName(String motherMiddleName) {
-		this.motherMiddleName = motherMiddleName;
-	}
-
-	public String getMotherLastName() {
-		return motherLastName;
-	}
-
-	public AdmissionEnquiry motherLastName(String motherLastName) {
-		this.motherLastName = motherLastName;
-		return this;
-	}
-
-	public void setMotherLastName(String motherLastName) {
-		this.motherLastName = motherLastName;
-	}
-
-	public String getContactNumber() {
-		return contactNumber;
-	}
-
-	public AdmissionEnquiry contactNumber(String contactNumber) {
-		this.contactNumber = contactNumber;
-		return this;
-	}
-
-	public void setContactNumber(String contactNumber) {
-		this.contactNumber = contactNumber;
-	}
-
-	public String getAlternateMobileNumber() {
-		return alternateMobileNumber;
-	}
-
-	public AdmissionEnquiry alternateMobileNumber(String alternateMobileNumber) {
-		this.alternateMobileNumber = alternateMobileNumber;
-		return this;
-	}
-
-	public void setAlternateMobileNumber(String alternateMobileNumber) {
-		this.alternateMobileNumber = alternateMobileNumber;
-	}
-
-	public LocalDate getDateOfBirth() {
-		return dateOfBirth;
-	}
-
-	public AdmissionEnquiry dateOfBirth(LocalDate dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-		return this;
-	}
-
-	public void setDateOfBirth(LocalDate dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public AdmissionEnquiry email(String email) {
-		this.email = email;
-		return this;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Gender getSex() {
-		return sex;
-	}
-
-	public AdmissionEnquiry sex(Gender sex) {
-		this.sex = sex;
-		return this;
-	}
-
-	public void setSex(Gender sex) {
-		this.sex = sex;
-	}
-
-	public String getComments() {
-		return comments;
-	}
-
-	public AdmissionEnquiry comments(String comments) {
-		this.comments = comments;
-		return this;
-	}
-
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
-
-	public CourseEnum getCourseApplyingFor() {
-		return courseApplyingFor;
-	}
-
-	public AdmissionEnquiry courseApplyingFor(CourseEnum courseApplyingFor) {
-		this.courseApplyingFor = courseApplyingFor;
-		return this;
-	}
-
-	public void setCourseApplyingFor(CourseEnum courseApplyingFor) {
-		this.courseApplyingFor = courseApplyingFor;
-	}
-
-	public String getHighestQualification() {
-		return highestQualification;
-	}
-
-	public AdmissionEnquiry highestQualification(String highestQualification) {
-		this.highestQualification = highestQualification;
-		return this;
-	}
-
-	public void setHighestQualification(String highestQualification) {
-		this.highestQualification = highestQualification;
-	}
-
-	public ModeOfEnquiry getModeOfEnquiry() {
-		return modeOfEnquiry;
-	}
-
-	public AdmissionEnquiry modeOfEnquiry(ModeOfEnquiry modeOfEnquiry) {
-		this.modeOfEnquiry = modeOfEnquiry;
-		return this;
-	}
-
-	public void setModeOfEnquiry(ModeOfEnquiry modeOfEnquiry) {
-		this.modeOfEnquiry = modeOfEnquiry;
-	}
-
-	public EnquiryStatus getStatus() {
-		return status;
-	}
-
-	public AdmissionEnquiry status(EnquiryStatus status) {
-		this.status = status;
-		return this;
-	}
-
-	public void setStatus(EnquiryStatus status) {
-		this.status = status;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public AdmissionEnquiry description(String description) {
-		this.description = description;
-		return this;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public LocalDate getEnquiryDate() {
-		return enquiryDate;
-	}
-
-	public AdmissionEnquiry enquiryDate(LocalDate enquiryDate) {
-		this.enquiryDate = enquiryDate;
-		return this;
-	}
-
-	public void setEnquiryDate(LocalDate enquiryDate) {
-		this.enquiryDate = enquiryDate;
-	}
-
-	public LocalDate getUpdatedOn() {
-		return updatedOn;
-	}
-
-	public AdmissionEnquiry updatedOn(LocalDate updatedOn) {
-		this.updatedOn = updatedOn;
-		return this;
-	}
-
-	public void setUpdatedOn(LocalDate updatedOn) {
-		this.updatedOn = updatedOn;
-	}
-
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public AdmissionEnquiry updatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-		return this;
-	}
-
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public Branch getBranch() {
-		return branch;
-	}
-
-	public AdmissionEnquiry branch(Branch branch) {
-		this.branch = branch;
-		return this;
-	}
-
-	public void setBranch(Branch branch) {
-		this.branch = branch;
-	}
-
-	public Department getDepartment() {
-		return department;
-	}
-
-	public AdmissionEnquiry department(Department department) {
-		this.department = department;
-		return this;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
-
-	public Batch getBatch() {
-		return batch;
-	}
-
-	public AdmissionEnquiry batch(Batch batch) {
-		this.batch = batch;
-		return this;
-	}
-
-	public void setBatch(Batch batch) {
-		this.batch = batch;
-	}
-
-	public State getState() {
-		return state;
-	}
-
-	public AdmissionEnquiry state(State state) {
-		this.state = state;
-		return this;
-	}
-
-	public void setState(State state) {
-		this.state = state;
-	}
-
-	public City getCity() {
-		return city;
-	}
-
-	public AdmissionEnquiry city(City city) {
-		this.city = city;
-		return this;
-	}
-
-	public void setCity(City city) {
-		this.city = city;
-	}
-
-	public Country getCountry() {
-		return country;
-	}
-
-	public AdmissionEnquiry country(Country country) {
-		this.country = country;
-		return this;
-	}
-
-	public void setCountry(Country country) {
-		this.country = country;
-	}
-	// jhipster-needle-entity-add-getters-setters - JHipster will add getters
-	// and setters here, do not remove
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		AdmissionEnquiry admissionEnquiry = (AdmissionEnquiry) o;
-		if (admissionEnquiry.getId() == null || getId() == null) {
-			return false;
-		}
-		return Objects.equals(getId(), admissionEnquiry.getId());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(getId());
-	}
-
-	@Override
-	public String toString() {
-		return "AdmissionEnquiry{" + "id=" + getId() + ", studentName='"
-				+ getStudentName() + "'" + ", studentMiddleName='"
-				+ getStudentMiddleName() + "'" + ", studentLastName='"
-				+ getStudentLastName() + "'" + ", fatherName='" + getFatherName() + "'"
-				+ ", fatherMiddleName='" + getFatherMiddleName() + "'"
-				+ ", fatherLastName='" + getFatherLastName() + "'" + ", motherName='"
-				+ getMotherName() + "'" + ", motherMiddleName='" + getMotherMiddleName()
-				+ "'" + ", motherLastName='" + getMotherLastName() + "'"
-				+ ", contactNumber='" + getContactNumber() + "'"
-				+ ", alternateMobileNumber='" + getAlternateMobileNumber() + "'"
-				+ ", dateOfBirth='" + getDateOfBirth() + "'" + ", email='" + getEmail()
-				+ "'" + ", sex='" + getSex() + "'" + ", comments='" + getComments() + "'"
-				+ ", courseApplyingFor='" + getCourseApplyingFor() + "'"
-				+ ", highestQualification='" + getHighestQualification() + "'"
-				+ ", modeOfEnquiry='" + getModeOfEnquiry() + "'" + ", status='"
-				+ getStatus() + "'" + ", description='" + getDescription() + "'"
-				+ ", enquiryDate='" + getEnquiryDate() + "'" + ", updatedOn='"
-				+ getUpdatedOn() + "'" + ", updatedBy='" + getUpdatedBy() + "'" + "}";
-	}
+    private LocalDate createdOn;
+
+    @Column(name = "updated_by")
+    private String updatedBy;
+
+    @Column(name = "updated_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate updatedOn;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public AdmissionEnquiry studentName(String studentName) {
+        this.studentName = studentName;
+        return this;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getStudentMiddleName() {
+        return studentMiddleName;
+    }
+
+    public AdmissionEnquiry studentMiddleName(String studentMiddleName) {
+        this.studentMiddleName = studentMiddleName;
+        return this;
+    }
+
+    public void setStudentMiddleName(String studentMiddleName) {
+        this.studentMiddleName = studentMiddleName;
+    }
+
+    public String getStudentLastName() {
+        return studentLastName;
+    }
+
+    public AdmissionEnquiry studentLastName(String studentLastName) {
+        this.studentLastName = studentLastName;
+        return this;
+    }
+
+    public void setStudentLastName(String studentLastName) {
+        this.studentLastName = studentLastName;
+    }
+
+    public String getCellPhoneNo() {
+        return cellPhoneNo;
+    }
+
+    public AdmissionEnquiry cellPhoneNo(String cellPhoneNo) {
+        this.cellPhoneNo = cellPhoneNo;
+        return this;
+    }
+
+    public void setCellPhoneNo(String cellPhoneNo) {
+        this.cellPhoneNo = cellPhoneNo;
+    }
+
+    public String getLandLinePhoneNo() {
+        return landLinePhoneNo;
+    }
+
+    public AdmissionEnquiry landLinePhoneNo(String landLinePhoneNo) {
+        this.landLinePhoneNo = landLinePhoneNo;
+        return this;
+    }
+
+    public void setLandLinePhoneNo(String landLinePhoneNo) {
+        this.landLinePhoneNo = landLinePhoneNo;
+    }
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public AdmissionEnquiry emailId(String emailId) {
+        this.emailId = emailId;
+        return this;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public AdmissionEnquiry dateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+        return this;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public AdmissionEnquiry gender(String gender) {
+        this.gender = gender;
+        return this;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getHighestQualification() {
+        return highestQualification;
+    }
+
+    public AdmissionEnquiry highestQualification(String highestQualification) {
+        this.highestQualification = highestQualification;
+        return this;
+    }
+
+    public void setHighestQualification(String highestQualification) {
+        this.highestQualification = highestQualification;
+    }
+
+    public String getModeOfEnquiry() {
+        return modeOfEnquiry;
+    }
+
+    public AdmissionEnquiry modeOfEnquiry(String modeOfEnquiry) {
+        this.modeOfEnquiry = modeOfEnquiry;
+        return this;
+    }
+
+    public void setModeOfEnquiry(String modeOfEnquiry) {
+        this.modeOfEnquiry = modeOfEnquiry;
+    }
+
+    public LocalDate getEnquiryDate() {
+        return enquiryDate;
+    }
+
+    public AdmissionEnquiry enquiryDate(LocalDate enquiryDate) {
+        this.enquiryDate = enquiryDate;
+        return this;
+    }
+
+    public void setEnquiryDate(LocalDate enquiryDate) {
+        this.enquiryDate = enquiryDate;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public AdmissionEnquiry comments(String comments) {
+        this.comments = comments;
+        return this;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public Long getBranchId() {
+        return branchId;
+    }
+
+    public AdmissionEnquiry branchId(Long branchId) {
+        this.branchId = branchId;
+        return this;
+    }
+
+    public void setBranchId(Long branchId) {
+        this.branchId = branchId;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public AdmissionEnquiry departmentId(Long departmentId) {
+        this.departmentId = departmentId;
+        return this;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public AdmissionEnquiry courseId(Long courseId) {
+        this.courseId = courseId;
+        return this;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
+    public Long getSemesterId() {
+        return semesterId;
+    }
+
+    public AdmissionEnquiry semesterId(Long semesterId) {
+        this.semesterId = semesterId;
+        return this;
+    }
+
+    public void setSemesterId(Long semesterId) {
+        this.semesterId = semesterId;
+    }
+
+    public Long getBatchId() {
+        return batchId;
+    }
+
+    public AdmissionEnquiry batchId(Long batchId) {
+        this.batchId = batchId;
+        return this;
+    }
+
+    public void setBatchId(Long batchId) {
+        this.batchId = batchId;
+    }
+
+    public Long getStateId() {
+        return stateId;
+    }
+
+    public AdmissionEnquiry stateId(Long stateId) {
+        this.stateId = stateId;
+        return this;
+    }
+
+    public void setStateId(Long stateId) {
+        this.stateId = stateId;
+    }
+
+    public Long getCityId() {
+        return cityId;
+    }
+
+    public AdmissionEnquiry cityId(Long cityId) {
+        this.cityId = cityId;
+        return this;
+    }
+
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
+    }
+
+    public Long getAcademicYearId() {
+        return academicYearId;
+    }
+
+    public AdmissionEnquiry academicYearId(Long academicYearId) {
+        this.academicYearId = academicYearId;
+        return this;
+    }
+
+    public void setAcademicYearId(Long academicYearId) {
+        this.academicYearId = academicYearId;
+    }
+
+    public String getEnquiryStatus() {
+        return enquiryStatus;
+    }
+
+    public AdmissionEnquiry enquiryStatus(String enquiryStatus) {
+        this.enquiryStatus = enquiryStatus;
+        return this;
+    }
+
+    public void setEnquiryStatus(String enquiryStatus) {
+        this.enquiryStatus = enquiryStatus;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public AdmissionEnquiry createdBy(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDate getCreatedOn() {
+        return createdOn;
+    }
+
+    public AdmissionEnquiry createdOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+        return this;
+    }
+
+    public void setCreatedOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public AdmissionEnquiry updatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+        return this;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDate getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public AdmissionEnquiry updatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+        return this;
+    }
+
+    public void setUpdatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AdmissionEnquiry)) {
+            return false;
+        }
+        return id != null && id.equals(((AdmissionEnquiry) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    @Override
+    public String toString() {
+        return "AdmissionEnquiry{" +
+            "id=" + getId() +
+            ", studentName='" + getStudentName() + "'" +
+            ", studentMiddleName='" + getStudentMiddleName() + "'" +
+            ", studentLastName='" + getStudentLastName() + "'" +
+            ", cellPhoneNo='" + getCellPhoneNo() + "'" +
+            ", landLinePhoneNo='" + getLandLinePhoneNo() + "'" +
+            ", emailId='" + getEmailId() + "'" +
+            ", dateOfBirth='" + getDateOfBirth() + "'" +
+            ", gender='" + getGender() + "'" +
+            ", highestQualification='" + getHighestQualification() + "'" +
+            ", modeOfEnquiry='" + getModeOfEnquiry() + "'" +
+            ", enquiryDate='" + getEnquiryDate() + "'" +
+            ", comments='" + getComments() + "'" +
+            ", branchId=" + getBranchId() +
+            ", departmentId=" + getDepartmentId() +
+            ", courseId=" + getCourseId() +
+            ", semesterId=" + getSemesterId() +
+            ", batchId=" + getBatchId() +
+            ", stateId=" + getStateId() +
+            ", cityId=" + getCityId() +
+            ", academicYearId=" + getAcademicYearId() +
+            ", enquiryStatus='" + getEnquiryStatus() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
+            ", createdOn='" + getCreatedOn() + "'" +
+            ", updatedBy='" + getUpdatedBy() + "'" +
+            ", updatedOn='" + getUpdatedOn() + "'" +
+            "}";
+    }
 }
