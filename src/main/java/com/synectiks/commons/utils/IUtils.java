@@ -123,6 +123,23 @@ public interface IUtils {
 			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
 			.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
 
+	ObjectMapper ELST_MAPPER = new ObjectMapper()
+			.registerModule(new JavaTimeModule()
+					.addSerializer(LocalDate.class,
+							new LocalDateSerializer(
+									DateTimeFormatter.ofPattern("yyyy-M-d")))
+					.addDeserializer(LocalDate.class,
+							new LocalDateDeserializer(
+									DateTimeFormatter.ofPattern("yyyy-M-d"))))
+			//.setVisibility(PropertyAccessor.ALL, Visibility.NONE)
+			.setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
+			.setDateFormat(new SimpleDateFormat(IConsts.JSON_DATE_FORMAT))
+			.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+			.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
+			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+			.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+
 	static HttpServletRequest asHttp(ServletRequest req) {
 		return (HttpServletRequest) req;
 	}
