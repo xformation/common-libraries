@@ -1,17 +1,26 @@
 package com.synectiks.cms.entities;
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.synectiks.commons.interfaces.IESEntity;
-
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A College.
@@ -29,24 +38,40 @@ public class College implements Serializable, IESEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "short_name", nullable = false)
-    private String shortName;
+    @Column(name = "college_name")
+    private String collegeName;
 
-    @Column(name = "logo_path")
-    private String logoPath;
-
-    @Column(name = "background_image_path")
-    private String backgroundImagePath;
-
-    @Column(name = "instruction_information")
-    private String instructionInformation;
+    @Column(name = "logo_file_path")
+    private String logoFilePath;
 
     @Column(name = "logo_file_name")
     private String logoFileName;
 
-    @Column(name = "background_image_file_name")
-    private String backgroundImageFileName;
+    @Column(name = "logo_file_extension")
+    private String logoFileExtension;
+
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "created_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate createdOn;
+
+    @Column(name = "updated_by")
+    private String updatedBy;
+
+    @Column(name = "updated_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate updatedOn;
+
+    @Column(name = "status")
+    private String status;
+
+    @ManyToOne
+    @JsonIgnoreProperties("colleges")
+    private Country country;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -57,56 +82,30 @@ public class College implements Serializable, IESEntity {
         this.id = id;
     }
 
-    public String getShortName() {
-        return shortName;
+    public String getCollegeName() {
+        return collegeName;
     }
 
-    public College shortName(String shortName) {
-        this.shortName = shortName;
+    public College collegeName(String collegeName) {
+        this.collegeName = collegeName;
         return this;
     }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    public void setCollegeName(String collegeName) {
+        this.collegeName = collegeName;
     }
 
-    public String getLogoPath() {
-        return logoPath;
+    public String getLogoFilePath() {
+        return logoFilePath;
     }
 
-    public College logoPath(String logoPath) {
-        this.logoPath = logoPath;
+    public College logoFilePath(String logoFilePath) {
+        this.logoFilePath = logoFilePath;
         return this;
     }
 
-    public void setLogoPath(String logoPath) {
-        this.logoPath = logoPath;
-    }
-
-    public String getBackgroundImagePath() {
-        return backgroundImagePath;
-    }
-
-    public College backgroundImagePath(String backgroundImagePath) {
-        this.backgroundImagePath = backgroundImagePath;
-        return this;
-    }
-
-    public void setBackgroundImagePath(String backgroundImagePath) {
-        this.backgroundImagePath = backgroundImagePath;
-    }
-
-    public String getInstructionInformation() {
-        return instructionInformation;
-    }
-
-    public College instructionInformation(String instructionInformation) {
-        this.instructionInformation = instructionInformation;
-        return this;
-    }
-
-    public void setInstructionInformation(String instructionInformation) {
-        this.instructionInformation = instructionInformation;
+    public void setLogoFilePath(String logoFilePath) {
+        this.logoFilePath = logoFilePath;
     }
 
     public String getLogoFileName() {
@@ -122,17 +121,95 @@ public class College implements Serializable, IESEntity {
         this.logoFileName = logoFileName;
     }
 
-    public String getBackgroundImageFileName() {
-        return backgroundImageFileName;
+    public String getLogoFileExtension() {
+        return logoFileExtension;
     }
 
-    public College backgroundImageFileName(String backgroundImageFileName) {
-        this.backgroundImageFileName = backgroundImageFileName;
+    public College logoFileExtension(String logoFileExtension) {
+        this.logoFileExtension = logoFileExtension;
         return this;
     }
 
-    public void setBackgroundImageFileName(String backgroundImageFileName) {
-        this.backgroundImageFileName = backgroundImageFileName;
+    public void setLogoFileExtension(String logoFileExtension) {
+        this.logoFileExtension = logoFileExtension;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public College createdBy(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDate getCreatedOn() {
+        return createdOn;
+    }
+
+    public College createdOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+        return this;
+    }
+
+    public void setCreatedOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public College updatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+        return this;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDate getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public College updatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+        return this;
+    }
+
+    public void setUpdatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public College status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public College country(Country country) {
+        this.country = country;
+        return this;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -141,31 +218,30 @@ public class College implements Serializable, IESEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof College)) {
             return false;
         }
-        College college = (College) o;
-        if (college.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), college.getId());
+        return id != null && id.equals(((College) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override
     public String toString() {
         return "College{" +
             "id=" + getId() +
-            ", shortName='" + getShortName() + "'" +
-            ", logoPath='" + getLogoPath() + "'" +
-            ", backgroundImagePath='" + getBackgroundImagePath() + "'" +
-            ", instructionInformation='" + getInstructionInformation() + "'" +
+            ", collegeName='" + getCollegeName() + "'" +
+            ", logoFilePath='" + getLogoFilePath() + "'" +
             ", logoFileName='" + getLogoFileName() + "'" +
-            ", backgroundImageFileName='" + getBackgroundImageFileName() + "'" +
+            ", logoFileExtension='" + getLogoFileExtension() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
+            ", createdOn='" + getCreatedOn() + "'" +
+            ", updatedBy='" + getUpdatedBy() + "'" +
+            ", updatedOn='" + getUpdatedOn() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }

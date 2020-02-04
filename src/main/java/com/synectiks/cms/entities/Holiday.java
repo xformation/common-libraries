@@ -1,23 +1,25 @@
 package com.synectiks.cms.entities;
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import org.springframework.data.elasticsearch.annotations.Document;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
-
-import com.synectiks.cms.entities.enumeration.Status;
 import com.synectiks.commons.interfaces.IESEntity;
 
 /**
@@ -29,120 +31,202 @@ import com.synectiks.commons.interfaces.IESEntity;
 @Document(indexName = "holiday")
 public class Holiday implements Serializable, IESEntity {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-	@SequenceGenerator(name = "sequenceGenerator")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    private Long id;
 
-	@NotNull
-	@Column(name = "holiday_desc", nullable = false)
-	private String holidayDesc;
+    @Column(name = "description")
+    private String description;
 
-	@NotNull
-	@Column(name = "holiday_date", nullable = false)
-	@JsonSerialize(using = LocalDateSerializer.class)
+    @Column(name = "holiday_date")
+    @JsonSerialize(using = LocalDateSerializer.class)
 	@JsonDeserialize(using = LocalDateDeserializer.class)
-	private LocalDate holidayDate;
+    private LocalDate holidayDate;
 
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(name = "holiday_status", nullable = false)
-	private Status holidayStatus;
+    @Column(name = "comments")
+    private String comments;
 
-	@ManyToOne
-	@JsonIgnoreProperties("holidays")
-	private AcademicYear academicyear;
+    @Column(name = "created_by")
+    private String createdBy;
 
-	// jhipster-needle-entity-add-field - JHipster will add fields here, do not
-	// remove
-	public Long getId() {
-		return id;
-	}
+    @Column(name = "created_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate createdOn;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column(name = "updated_by")
+    private String updatedBy;
 
-	public String getHolidayDesc() {
-		return holidayDesc;
-	}
+    @Column(name = "updated_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate updatedOn;
 
-	public Holiday holidayDesc(String holidayDesc) {
-		this.holidayDesc = holidayDesc;
-		return this;
-	}
+    @Column(name = "status")
+    private String status;
 
-	public void setHolidayDesc(String holidayDesc) {
-		this.holidayDesc = holidayDesc;
-	}
+    @ManyToOne
+    @JsonIgnoreProperties("holidays")
+    private AcademicYear academicYear;
 
-	public LocalDate getHolidayDate() {
-		return holidayDate;
-	}
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+        return id;
+    }
 
-	public Holiday holidayDate(LocalDate holidayDate) {
-		this.holidayDate = holidayDate;
-		return this;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setHolidayDate(LocalDate holidayDate) {
-		this.holidayDate = holidayDate;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public Status getHolidayStatus() {
-		return holidayStatus;
-	}
+    public Holiday description(String description) {
+        this.description = description;
+        return this;
+    }
 
-	public Holiday holidayStatus(Status holidayStatus) {
-		this.holidayStatus = holidayStatus;
-		return this;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setHolidayStatus(Status holidayStatus) {
-		this.holidayStatus = holidayStatus;
-	}
+    public LocalDate getHolidayDate() {
+        return holidayDate;
+    }
 
-	public AcademicYear getAcademicyear() {
-		return academicyear;
-	}
+    public Holiday holidayDate(LocalDate holidayDate) {
+        this.holidayDate = holidayDate;
+        return this;
+    }
 
-	public Holiday academicyear(AcademicYear academicYear) {
-		this.academicyear = academicYear;
-		return this;
-	}
+    public void setHolidayDate(LocalDate holidayDate) {
+        this.holidayDate = holidayDate;
+    }
 
-	public void setAcademicyear(AcademicYear academicYear) {
-		this.academicyear = academicYear;
-	}
-	// jhipster-needle-entity-add-getters-setters - JHipster will add getters
-	// and setters here, do not remove
+    public String getComments() {
+        return comments;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		Holiday holiday = (Holiday) o;
-		if (holiday.getId() == null || getId() == null) {
-			return false;
-		}
-		return Objects.equals(getId(), holiday.getId());
-	}
+    public Holiday comments(String comments) {
+        this.comments = comments;
+        return this;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(getId());
-	}
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 
-	@Override
-	public String toString() {
-		return "Holiday{" + "id=" + getId() + ", holidayDesc='" + getHolidayDesc() + "'"
-				+ ", holidayDate='" + getHolidayDate() + "'" + ", holidayStatus='"
-				+ getHolidayStatus() + "'" + "}";
-	}
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public Holiday createdBy(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDate getCreatedOn() {
+        return createdOn;
+    }
+
+    public Holiday createdOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+        return this;
+    }
+
+    public void setCreatedOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public Holiday updatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+        return this;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDate getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public Holiday updatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+        return this;
+    }
+
+    public void setUpdatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Holiday status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public AcademicYear getAcademicYear() {
+        return academicYear;
+    }
+
+    public Holiday academicYear(AcademicYear academicYear) {
+        this.academicYear = academicYear;
+        return this;
+    }
+
+    public void setAcademicYear(AcademicYear academicYear) {
+        this.academicYear = academicYear;
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Holiday)) {
+            return false;
+        }
+        return id != null && id.equals(((Holiday) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    @Override
+    public String toString() {
+        return "Holiday{" +
+            "id=" + getId() +
+            ", description='" + getDescription() + "'" +
+            ", holidayDate='" + getHolidayDate() + "'" +
+            ", comments='" + getComments() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
+            ", createdOn='" + getCreatedOn() + "'" +
+            ", updatedBy='" + getUpdatedBy() + "'" +
+            ", updatedOn='" + getUpdatedOn() + "'" +
+            ", status='" + getStatus() + "'" +
+            "}";
+    }
 }

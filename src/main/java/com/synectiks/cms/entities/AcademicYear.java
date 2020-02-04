@@ -1,22 +1,24 @@
 package com.synectiks.cms.entities;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
-import java.io.Serializable;
-
-import java.time.LocalDate;
-import java.util.Objects;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.synectiks.cms.entities.enumeration.Status;
 import com.synectiks.commons.interfaces.IESEntity;
 
 /**
@@ -28,122 +30,175 @@ import com.synectiks.commons.interfaces.IESEntity;
 @Document(indexName = "academicyear")
 public class AcademicYear implements Serializable, IESEntity {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-	@SequenceGenerator(name = "sequenceGenerator")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    private Long id;
 
-	@NotNull
-	@Column(name = "jhi_year", nullable = false)
-	private String year;
+    @Column(name = "description")
+    private String description;
 
-	@NotNull
-	@Column(name = "start_date", nullable = false)
-	@JsonSerialize(using = LocalDateSerializer.class)
+    @Column(name = "start_date")
+    @JsonSerialize(using = LocalDateSerializer.class)
 	@JsonDeserialize(using = LocalDateDeserializer.class)
-	private LocalDate startDate;
+    private LocalDate startDate;
 
-	@NotNull
-	@Column(name = "end_date", nullable = false)
-	@JsonSerialize(using = LocalDateSerializer.class)
+    @Column(name = "end_date")
+    @JsonSerialize(using = LocalDateSerializer.class)
 	@JsonDeserialize(using = LocalDateDeserializer.class)
-	private LocalDate endDate;
+    private LocalDate endDate;
 
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false)
-	private Status status;
+    @Column(name = "comments")
+    private String comments;
 
-	// jhipster-needle-entity-add-field - JHipster will add fields here, do not
-	// remove
-	public Long getId() {
-		return id;
-	}
+    @Column(name = "created_by")
+    private String createdBy;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column(name = "created_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate createdOn;
 
-	public String getYear() {
-		return year;
-	}
+    @Column(name = "updated_by")
+    private String updatedBy;
 
-	public AcademicYear year(String year) {
-		this.year = year;
-		return this;
-	}
+    @Column(name = "updated_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate updatedOn;
+    
+    @Column(name = "status")
+    private String status;
 
-	public void setYear(String year) {
-		this.year = year;
-	}
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+        return id;
+    }
 
-	public LocalDate getStartDate() {
-		return startDate;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public AcademicYear startDate(LocalDate startDate) {
-		this.startDate = startDate;
-		return this;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
-	}
+    public AcademicYear description(String description) {
+        this.description = description;
+        return this;
+    }
 
-	public LocalDate getEndDate() {
-		return endDate;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public AcademicYear endDate(LocalDate endDate) {
-		this.endDate = endDate;
-		return this;
-	}
+    public LocalDate getStartDate() {
+        return startDate;
+    }
 
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
+    public AcademicYear startDate(LocalDate startDate) {
+        this.startDate = startDate;
+        return this;
+    }
 
-	public Status getStatus() {
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public AcademicYear endDate(LocalDate endDate) {
+        this.endDate = endDate;
+        return this;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public AcademicYear comments(String comments) {
+        this.comments = comments;
+        return this;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getStatus() {
 		return status;
 	}
 
-	public AcademicYear status(Status status) {
-		this.status = status;
-		return this;
-	}
-
-	public void setStatus(Status status) {
+    public void setStatus(String status) {
 		this.status = status;
 	}
-	// jhipster-needle-entity-add-getters-setters - JHipster will add getters
-	// and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		AcademicYear academicYear = (AcademicYear) o;
-		if (academicYear.getId() == null || getId() == null) {
-			return false;
-		}
-		return Objects.equals(getId(), academicYear.getId());
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AcademicYear)) {
+            return false;
+        }
+        return id != null && id.equals(((AcademicYear) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    @Override
+    public String toString() {
+        return "AcademicYear{" +
+            "id=" + getId() +
+            ", description='" + getDescription() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
+            ", comments='" + getComments() + "'" +
+            ", status='" + getStatus() + "'" +
+            "}";
+    }
+
+	public String getCreatedBy() {
+		return createdBy;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(getId());
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
-	@Override
-	public String toString() {
-		return "AcademicYear{" + "id=" + getId() + ", year='" + getYear() + "'"
-				+ ", startDate='" + getStartDate() + "'" + ", endDate='" + getEndDate()
-				+ "'" + ", status='" + getStatus() + "'" + "}";
+	public LocalDate getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(LocalDate createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public LocalDate getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(LocalDate updatedOn) {
+		this.updatedOn = updatedOn;
 	}
 }

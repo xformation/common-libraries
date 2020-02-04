@@ -1,18 +1,21 @@
 package com.synectiks.cms.entities;
+import java.io.Serializable;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.synectiks.commons.interfaces.IESEntity;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
-import java.io.Serializable;
-import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.synectiks.commons.interfaces.IESEntity;
 
 /**
  * A Currency.
@@ -24,14 +27,13 @@ import java.util.Objects;
 public class Currency implements Serializable, IESEntity {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "currency_name", nullable = false)
+    @Column(name = "currency_name")
     private String currencyName;
 
     @Column(name = "currency_code")
@@ -111,19 +113,15 @@ public class Currency implements Serializable, IESEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Currency)) {
             return false;
         }
-        Currency currency = (Currency) o;
-        if (currency.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), currency.getId());
+        return id != null && id.equals(((Currency) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override
