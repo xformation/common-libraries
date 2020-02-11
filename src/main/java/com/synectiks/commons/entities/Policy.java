@@ -41,6 +41,8 @@ public class Policy extends Entity {
 	private static final long serialVersionUID = -6631676861385312561L;
 
 	private String name;
+	private String entity;
+	private boolean searchable;
 	private List<String> rules;
 	private String description;
 
@@ -60,6 +62,22 @@ public class Policy extends Entity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public boolean isSearchable() {
+		return searchable;
+	}
+
+	public void setSearchable(boolean searchable) {
+		this.searchable = searchable;
+	}
+
+	public String getEntity() {
+		return entity;
+	}
+
+	public void setEntity(String entity) {
+		this.entity = entity;
 	}
 
 	public String getDescription() {
@@ -82,6 +100,8 @@ public class Policy extends Entity {
 	public String toString() {
 		return "{ " + (id != null ? "\"id\": \"" + id + "\", " : "")
 				+ (name != null ? "\"name\": \"" + name + "\", " : "")
+				+ (entity != null ? "\"entity\": \"" + entity + "\", " : "")
+				+ ("\"searchable\": \"" + searchable + "\", ")
 				+ (description != null ? "\"description\": \"" + description + "\", " : "")
 				+ (rules != null ? "\"rules\": \"" + rules + "\"" : "") + "}";
 	}

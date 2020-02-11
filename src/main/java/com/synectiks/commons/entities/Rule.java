@@ -17,6 +17,7 @@ import com.synectiks.commons.entities.dynamodb.Entity;
  *	{
  *		"name": "rule-name",
  *		"entity": "entity-name",
+ *      "searchable": true,
  *		"description": "",
  *		"checks: [
  *			"key > 10",
@@ -37,6 +38,7 @@ public class Rule extends Entity {
 
 	private String name;
 	private String entity;
+	private boolean searchable;
 	private String description;
 	private List<String> checks;
 
@@ -67,6 +69,14 @@ public class Rule extends Entity {
 		this.entity = entity;
 	}
 
+	public boolean isSearchable() {
+		return searchable;
+	}
+
+	public void setSearchable(boolean searchable) {
+		this.searchable = searchable;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -88,6 +98,7 @@ public class Rule extends Entity {
 		return "{ " + (id != null ? "\"id\": \"" + id + "\", " : "")
 				+ (name != null ? "\"name\": \"" + name + "\", " : "")
 				+ (entity != null ? "\"entity\": \"" + entity + "\", " : "")
+				+ ("\"searchable\": \"" + searchable + "\", ")
 				+ (description != null ? "\"description\": \"" + description + "\", " : "")
 				+ (checks != null ? "\"checks\": \"" + checks + "\"" : "") + "}";
 	}
