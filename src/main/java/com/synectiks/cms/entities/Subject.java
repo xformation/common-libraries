@@ -1,20 +1,21 @@
 package com.synectiks.cms.entities;
+import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
-import java.io.Serializable;
-import java.util.Objects;
 
-import com.synectiks.cms.entities.enumeration.SubTypeEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.synectiks.commons.interfaces.IESEntity;
-import com.synectiks.cms.entities.enumeration.Status;
 
 /**
  * A Subject.
@@ -26,29 +27,23 @@ import com.synectiks.cms.entities.enumeration.Status;
 public class Subject implements Serializable, IESEntity {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "subject_code", nullable = false)
+    @Column(name = "subject_code")
     private String subjectCode;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "subject_type", nullable = false)
-    private SubTypeEnum subjectType;
+    @Column(name = "subject_type")
+    private String subjectType;
 
-    @NotNull
-    @Column(name = "subject_desc", nullable = false)
+    @Column(name = "subject_desc")
     private String subjectDesc;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private Status status;
+    @Column(name = "status")
+    private String status;
 
     @ManyToOne
     @JsonIgnoreProperties("subjects")
@@ -80,16 +75,16 @@ public class Subject implements Serializable, IESEntity {
         this.subjectCode = subjectCode;
     }
 
-    public SubTypeEnum getSubjectType() {
+    public String getSubjectType() {
         return subjectType;
     }
 
-    public Subject subjectType(SubTypeEnum subjectType) {
+    public Subject subjectType(String subjectType) {
         this.subjectType = subjectType;
         return this;
     }
 
-    public void setSubjectType(SubTypeEnum subjectType) {
+    public void setSubjectType(String subjectType) {
         this.subjectType = subjectType;
     }
 
@@ -106,16 +101,16 @@ public class Subject implements Serializable, IESEntity {
         this.subjectDesc = subjectDesc;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public Subject status(Status status) {
+    public Subject status(String status) {
         this.status = status;
         return this;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -151,19 +146,15 @@ public class Subject implements Serializable, IESEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Subject)) {
             return false;
         }
-        Subject subject = (Subject) o;
-        if (subject.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), subject.getId());
+        return id != null && id.equals(((Subject) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

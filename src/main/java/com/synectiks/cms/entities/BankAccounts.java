@@ -1,16 +1,25 @@
 package com.synectiks.cms.entities;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import java.io.Serializable;
 
-import com.synectiks.cms.entities.enumeration.NameOfBank;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.synectiks.commons.interfaces.IESEntity;
 
 /**
@@ -27,41 +36,48 @@ public class BankAccounts implements Serializable, IESEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
-    @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "name_of_bank", nullable = false)
-    private NameOfBank nameOfBank;
+    @Column(name = "bank_name")
+    private String bankName;
 
-    @NotNull
-    @Column(name = "account_number", nullable = false)
+    @Column(name = "account_number")
     private String accountNumber;
 
-    @NotNull
-    @Column(name = "type_of_account", nullable = false)
+    @Column(name = "type_of_account")
     private String typeOfAccount;
 
-    @NotNull
-    @Column(name = "ifsc_code", nullable = false)
+    @Column(name = "ifsc_code")
     private String ifscCode;
 
-    @NotNull
-    @Column(name = "branch_address", nullable = false)
-    private String branchAddress;
+    @Column(name = "address")
+    private String address;
 
-    @NotNull
-    @Column(name = "corporate_id", nullable = false)
+    @Column(name = "corporate_id")
     private String corporateId;
 
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "created_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate createdOn;
+
+    @Column(name = "updated_by")
+    private String updatedBy;
+
+    @Column(name = "updated_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate updatedOn;
+
+    @Column(name = "status")
+    private String status;
+    
     @ManyToOne
     @JsonIgnoreProperties("bankAccounts")
     private Branch branch;
-
-    @ManyToOne
-    @JsonIgnoreProperties("bankAccounts")
-    private College college;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -72,17 +88,17 @@ public class BankAccounts implements Serializable, IESEntity {
         this.id = id;
     }
 
-    public NameOfBank getNameOfBank() {
-        return nameOfBank;
+    public String getBankName() {
+        return bankName;
     }
 
-    public BankAccounts nameOfBank(NameOfBank nameOfBank) {
-        this.nameOfBank = nameOfBank;
+    public BankAccounts bankName(String bankName) {
+        this.bankName = bankName;
         return this;
     }
 
-    public void setNameOfBank(NameOfBank nameOfBank) {
-        this.nameOfBank = nameOfBank;
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
     }
 
     public String getAccountNumber() {
@@ -124,17 +140,17 @@ public class BankAccounts implements Serializable, IESEntity {
         this.ifscCode = ifscCode;
     }
 
-    public String getBranchAddress() {
-        return branchAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public BankAccounts branchAddress(String branchAddress) {
-        this.branchAddress = branchAddress;
+    public BankAccounts address(String address) {
+        this.address = address;
         return this;
     }
 
-    public void setBranchAddress(String branchAddress) {
-        this.branchAddress = branchAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getCorporateId() {
@@ -162,19 +178,6 @@ public class BankAccounts implements Serializable, IESEntity {
     public void setBranch(Branch branch) {
         this.branch = branch;
     }
-
-    public College getCollege() {
-        return college;
-    }
-
-    public BankAccounts college(College college) {
-        this.college = college;
-        return this;
-    }
-
-    public void setCollege(College college) {
-        this.college = college;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -197,12 +200,52 @@ public class BankAccounts implements Serializable, IESEntity {
     public String toString() {
         return "BankAccounts{" +
             "id=" + getId() +
-            ", nameOfBank='" + getNameOfBank() + "'" +
+            ", bankName='" + getBankName() + "'" +
             ", accountNumber='" + getAccountNumber() + "'" +
             ", typeOfAccount='" + getTypeOfAccount() + "'" +
             ", ifscCode='" + getIfscCode() + "'" +
-            ", branchAddress='" + getBranchAddress() + "'" +
+            ", address='" + getAddress() + "'" +
             ", corporateId='" + getCorporateId() + "'" +
             "}";
     }
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public LocalDate getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(LocalDate createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public LocalDate getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(LocalDate updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

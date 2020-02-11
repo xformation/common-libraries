@@ -1,23 +1,25 @@
 package com.synectiks.cms.entities;
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import org.springframework.data.elasticsearch.annotations.Document;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
-
-import com.synectiks.cms.entities.enumeration.Status;
 import com.synectiks.commons.interfaces.IESEntity;
 
 /**
@@ -29,139 +31,221 @@ import com.synectiks.commons.interfaces.IESEntity;
 @Document(indexName = "term")
 public class Term implements Serializable, IESEntity {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-	@SequenceGenerator(name = "sequenceGenerator")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    private Long id;
 
-	@NotNull
-	@Column(name = "terms_desc", nullable = false)
-	private String termsDesc;
+    @Column(name = "description")
+    private String description;
 
-	@NotNull
-	@Column(name = "start_date", nullable = false)
-	@JsonSerialize(using = LocalDateSerializer.class)
+    @Column(name = "start_date")
+    @JsonSerialize(using = LocalDateSerializer.class)
 	@JsonDeserialize(using = LocalDateDeserializer.class)
-	private LocalDate startDate;
+    private LocalDate startDate;
 
-	@NotNull
-	@Column(name = "end_date", nullable = false)
-	@JsonSerialize(using = LocalDateSerializer.class)
+    @Column(name = "end_date")
+    @JsonSerialize(using = LocalDateSerializer.class)
 	@JsonDeserialize(using = LocalDateDeserializer.class)
-	private LocalDate endDate;
+    private LocalDate endDate;
 
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	@Column(name = "term_status", nullable = false)
-	private Status termStatus;
+    @Column(name = "comments")
+    private String comments;
 
-	@ManyToOne
-	@JsonIgnoreProperties("terms")
-	private AcademicYear academicyear;
+    @Column(name = "created_by")
+    private String createdBy;
 
-	// jhipster-needle-entity-add-field - JHipster will add fields here, do not
-	// remove
-	public Long getId() {
-		return id;
-	}
+    @Column(name = "created_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate createdOn;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column(name = "updated_by")
+    private String updatedBy;
 
-	public String getTermsDesc() {
-		return termsDesc;
-	}
+    @Column(name = "updated_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate updatedOn;
 
-	public Term termsDesc(String termsDesc) {
-		this.termsDesc = termsDesc;
-		return this;
-	}
+    @Column(name = "status")
+    private String status;
 
-	public void setTermsDesc(String termsDesc) {
-		this.termsDesc = termsDesc;
-	}
+    @ManyToOne
+    @JsonIgnoreProperties("terms")
+    private AcademicYear academicYear;
 
-	public LocalDate getStartDate() {
-		return startDate;
-	}
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+        return id;
+    }
 
-	public Term startDate(LocalDate startDate) {
-		this.startDate = startDate;
-		return this;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public LocalDate getEndDate() {
-		return endDate;
-	}
+    public Term description(String description) {
+        this.description = description;
+        return this;
+    }
 
-	public Term endDate(LocalDate endDate) {
-		this.endDate = endDate;
-		return this;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
+    public LocalDate getStartDate() {
+        return startDate;
+    }
 
-	public Status getTermStatus() {
-		return termStatus;
-	}
+    public Term startDate(LocalDate startDate) {
+        this.startDate = startDate;
+        return this;
+    }
 
-	public Term termStatus(Status termStatus) {
-		this.termStatus = termStatus;
-		return this;
-	}
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
 
-	public void setTermStatus(Status termStatus) {
-		this.termStatus = termStatus;
-	}
+    public LocalDate getEndDate() {
+        return endDate;
+    }
 
-	public AcademicYear getAcademicyear() {
-		return academicyear;
-	}
+    public Term endDate(LocalDate endDate) {
+        this.endDate = endDate;
+        return this;
+    }
 
-	public Term academicyear(AcademicYear academicYear) {
-		this.academicyear = academicYear;
-		return this;
-	}
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
 
-	public void setAcademicyear(AcademicYear academicYear) {
-		this.academicyear = academicYear;
-	}
-	// jhipster-needle-entity-add-getters-setters - JHipster will add getters
-	// and setters here, do not remove
+    public String getComments() {
+        return comments;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		Term term = (Term) o;
-		if (term.getId() == null || getId() == null) {
-			return false;
-		}
-		return Objects.equals(getId(), term.getId());
-	}
+    public Term comments(String comments) {
+        this.comments = comments;
+        return this;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(getId());
-	}
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 
-	@Override
-	public String toString() {
-		return "Term{" + "id=" + getId() + ", termsDesc='" + getTermsDesc() + "'"
-				+ ", startDate='" + getStartDate() + "'" + ", endDate='" + getEndDate()
-				+ "'" + ", termStatus='" + getTermStatus() + "'" + "}";
-	}
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public Term createdBy(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDate getCreatedOn() {
+        return createdOn;
+    }
+
+    public Term createdOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+        return this;
+    }
+
+    public void setCreatedOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public Term updatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+        return this;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDate getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public Term updatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+        return this;
+    }
+
+    public void setUpdatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Term status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public AcademicYear getAcademicYear() {
+        return academicYear;
+    }
+
+    public Term academicYear(AcademicYear academicYear) {
+        this.academicYear = academicYear;
+        return this;
+    }
+
+    public void setAcademicYear(AcademicYear academicYear) {
+        this.academicYear = academicYear;
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Term)) {
+            return false;
+        }
+        return id != null && id.equals(((Term) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    @Override
+    public String toString() {
+        return "Term{" +
+            "id=" + getId() +
+            ", description='" + getDescription() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
+            ", comments='" + getComments() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
+            ", createdOn='" + getCreatedOn() + "'" +
+            ", updatedBy='" + getUpdatedBy() + "'" +
+            ", updatedOn='" + getUpdatedOn() + "'" +
+            ", status='" + getStatus() + "'" +
+            "}";
+    }
 }

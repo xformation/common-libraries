@@ -1,18 +1,26 @@
 package com.synectiks.cms.entities;
+import java.io.Serializable;
+import java.time.LocalDate;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.synectiks.commons.interfaces.IESEntity;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
-import java.io.Serializable;
-import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.synectiks.commons.interfaces.IESEntity;
 
 /**
  * A AuthorizedSignatory.
@@ -24,55 +32,55 @@ import java.util.Objects;
 public class AuthorizedSignatory implements Serializable, IESEntity {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "signatory_name", nullable = false)
-    private String signatoryName;
+    @Column(name = "name")
+    private String name;
 
-    @NotNull
-    @Column(name = "signatory_father_name", nullable = false)
-    private String signatoryFatherName;
+    @Column(name = "father_name")
+    private String fatherName;
 
-    @NotNull
-    @Column(name = "signatory_designation", nullable = false)
-    private String signatoryDesignation;
+    @Column(name = "designation")
+    private String designation;
 
-    @NotNull
-    @Column(name = "address_1", nullable = false)
-    private String address1;
+    @Column(name = "address")
+    private String address;
 
-    @Column(name = "address_2")
-    private String address2;
+    @Column(name = "email_id")
+    private String emailId;
 
-    @Column(name = "address_3")
-    private String address3;
+    @Column(name = "cell_phone_number")
+    private String cellPhoneNumber;
 
-    @Column(name = "address_4")
-    private String address4;
+    @Column(name = "pan_no")
+    private String panNo;
 
-    @Column(name = "address_5")
-    private String address5;
+    @Column(name = "created_by")
+    private String createdBy;
 
-    @NotNull
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "created_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate createdOn;
 
-    @NotNull
-    @Column(name = "pan_card_number", nullable = false)
-    private String panCardNumber;
+    @Column(name = "updated_by")
+    private String updatedBy;
 
+    @Column(name = "updated_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate updatedOn;
+
+    @Column(name = "status")
+    private String status;
+    
     @ManyToOne
     @JsonIgnoreProperties("authorizedSignatories")
     private Branch branch;
-
-    @ManyToOne
-    @JsonIgnoreProperties("authorizedSignatories")
-    private College college;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -83,134 +91,95 @@ public class AuthorizedSignatory implements Serializable, IESEntity {
         this.id = id;
     }
 
-    public String getSignatoryName() {
-        return signatoryName;
+    public String getName() {
+        return name;
     }
 
-    public AuthorizedSignatory signatoryName(String signatoryName) {
-        this.signatoryName = signatoryName;
+    public AuthorizedSignatory name(String name) {
+        this.name = name;
         return this;
     }
 
-    public void setSignatoryName(String signatoryName) {
-        this.signatoryName = signatoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getSignatoryFatherName() {
-        return signatoryFatherName;
+    public String getFatherName() {
+        return fatherName;
     }
 
-    public AuthorizedSignatory signatoryFatherName(String signatoryFatherName) {
-        this.signatoryFatherName = signatoryFatherName;
+    public AuthorizedSignatory fatherName(String fatherName) {
+        this.fatherName = fatherName;
         return this;
     }
 
-    public void setSignatoryFatherName(String signatoryFatherName) {
-        this.signatoryFatherName = signatoryFatherName;
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
     }
 
-    public String getSignatoryDesignation() {
-        return signatoryDesignation;
+    public String getDesignation() {
+        return designation;
     }
 
-    public AuthorizedSignatory signatoryDesignation(String signatoryDesignation) {
-        this.signatoryDesignation = signatoryDesignation;
+    public AuthorizedSignatory designation(String designation) {
+        this.designation = designation;
         return this;
     }
 
-    public void setSignatoryDesignation(String signatoryDesignation) {
-        this.signatoryDesignation = signatoryDesignation;
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 
-    public String getAddress1() {
-        return address1;
+    public String getAddress() {
+        return address;
     }
 
-    public AuthorizedSignatory address1(String address1) {
-        this.address1 = address1;
+    public AuthorizedSignatory address(String address) {
+        this.address = address;
         return this;
     }
 
-    public void setAddress1(String address1) {
-        this.address1 = address1;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getAddress2() {
-        return address2;
+    public String getEmailId() {
+        return emailId;
     }
 
-    public AuthorizedSignatory address2(String address2) {
-        this.address2 = address2;
+    public AuthorizedSignatory emailId(String emailId) {
+        this.emailId = emailId;
         return this;
     }
 
-    public void setAddress2(String address2) {
-        this.address2 = address2;
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
     }
 
-    public String getAddress3() {
-        return address3;
+    public String getCellPhoneNumber() {
+        return cellPhoneNumber;
     }
 
-    public AuthorizedSignatory address3(String address3) {
-        this.address3 = address3;
+    public AuthorizedSignatory cellPhoneNumber(String cellPhoneNumber) {
+        this.cellPhoneNumber = cellPhoneNumber;
         return this;
     }
 
-    public void setAddress3(String address3) {
-        this.address3 = address3;
+    public void setCellPhoneNumber(String cellPhoneNumber) {
+        this.cellPhoneNumber = cellPhoneNumber;
     }
 
-    public String getAddress4() {
-        return address4;
+    public String getPanNo() {
+        return panNo;
     }
 
-    public AuthorizedSignatory address4(String address4) {
-        this.address4 = address4;
+    public AuthorizedSignatory panNo(String panNo) {
+        this.panNo = panNo;
         return this;
     }
 
-    public void setAddress4(String address4) {
-        this.address4 = address4;
-    }
-
-    public String getAddress5() {
-        return address5;
-    }
-
-    public AuthorizedSignatory address5(String address5) {
-        this.address5 = address5;
-        return this;
-    }
-
-    public void setAddress5(String address5) {
-        this.address5 = address5;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public AuthorizedSignatory email(String email) {
-        this.email = email;
-        return this;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPanCardNumber() {
-        return panCardNumber;
-    }
-
-    public AuthorizedSignatory panCardNumber(String panCardNumber) {
-        this.panCardNumber = panCardNumber;
-        return this;
-    }
-
-    public void setPanCardNumber(String panCardNumber) {
-        this.panCardNumber = panCardNumber;
+    public void setPanNo(String panNo) {
+        this.panNo = panNo;
     }
 
     public Branch getBranch() {
@@ -225,19 +194,6 @@ public class AuthorizedSignatory implements Serializable, IESEntity {
     public void setBranch(Branch branch) {
         this.branch = branch;
     }
-
-    public College getCollege() {
-        return college;
-    }
-
-    public AuthorizedSignatory college(College college) {
-        this.college = college;
-        return this;
-    }
-
-    public void setCollege(College college) {
-        this.college = college;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -245,35 +201,68 @@ public class AuthorizedSignatory implements Serializable, IESEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof AuthorizedSignatory)) {
             return false;
         }
-        AuthorizedSignatory authorizedSignatory = (AuthorizedSignatory) o;
-        if (authorizedSignatory.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), authorizedSignatory.getId());
+        return id != null && id.equals(((AuthorizedSignatory) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override
     public String toString() {
         return "AuthorizedSignatory{" +
             "id=" + getId() +
-            ", signatoryName='" + getSignatoryName() + "'" +
-            ", signatoryFatherName='" + getSignatoryFatherName() + "'" +
-            ", signatoryDesignation='" + getSignatoryDesignation() + "'" +
-            ", address1='" + getAddress1() + "'" +
-            ", address2='" + getAddress2() + "'" +
-            ", address3='" + getAddress3() + "'" +
-            ", address4='" + getAddress4() + "'" +
-            ", address5='" + getAddress5() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", panCardNumber='" + getPanCardNumber() + "'" +
+            ", name='" + getName() + "'" +
+            ", fatherName='" + getFatherName() + "'" +
+            ", designation='" + getDesignation() + "'" +
+            ", address='" + getAddress() + "'" +
+            ", emailId='" + getEmailId() + "'" +
+            ", cellPhoneNumber='" + getCellPhoneNumber() + "'" +
+            ", panNo='" + getPanNo() + "'" +
             "}";
     }
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public LocalDate getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(LocalDate createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public LocalDate getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(LocalDate updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

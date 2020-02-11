@@ -1,17 +1,22 @@
 package com.synectiks.cms.entities;
+import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
-import java.io.Serializable;
-import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.synectiks.cms.entities.enumeration.BatchEnum;
 import com.synectiks.commons.interfaces.IESEntity;
 
@@ -25,15 +30,14 @@ import com.synectiks.commons.interfaces.IESEntity;
 public class Batch implements Serializable, IESEntity {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "batch", nullable = false)
+    @Column(name = "batch")
     private BatchEnum batch;
 
     @ManyToOne
@@ -81,19 +85,15 @@ public class Batch implements Serializable, IESEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Batch)) {
             return false;
         }
-        Batch batch = (Batch) o;
-        if (batch.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), batch.getId());
+        return id != null && id.equals(((Batch) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

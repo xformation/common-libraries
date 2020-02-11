@@ -1,18 +1,27 @@
 package com.synectiks.cms.entities;
+import java.io.Serializable;
+import java.time.LocalDate;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.synectiks.commons.interfaces.IESEntity;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
-import java.io.Serializable;
-import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.synectiks.commons.interfaces.IESEntity;
 
 /**
  * A Branch.
@@ -24,27 +33,63 @@ import java.util.Objects;
 public class Branch implements Serializable, IESEntity {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "branch_name", nullable = false)
+    @Column(name = "branch_name")
     private String branchName;
 
-    @NotNull
-    @Column(name = "address_1", nullable = false)
-    private String address1;
+    @Column(name = "address")
+    private String address;
 
-    @NotNull
-    @Column(name = "address_2", nullable = false)
-    private String address2;
+    @Column(name = "pin_code")
+    private String pinCode;
 
-    @NotNull
-    @Column(name = "branch_head", nullable = false)
+    @Column(name = "branch_head")
     private String branchHead;
+
+    @Column(name = "cell_phone_no")
+    private String cellPhoneNo;
+
+    @Column(name = "land_line_phone_no")
+    private String landLinePhoneNo;
+
+    @Column(name = "email_id")
+    private String emailId;
+
+    @Column(name = "fax_no")
+    private String faxNo;
+
+    @Size(max = 3)
+    @Column(name = "is_main_branch", length = 3)
+    private String isMainBranch;
+
+    @Column(name = "start_date")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate startDate;
+
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "created_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate createdOn;
+
+    @Column(name = "updated_by")
+    private String updatedBy;
+
+    @Column(name = "updated_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate updatedOn;
+
+    @Column(name = "status")
+    private String status;
 
     @ManyToOne
     @JsonIgnoreProperties("branches")
@@ -80,30 +125,30 @@ public class Branch implements Serializable, IESEntity {
         this.branchName = branchName;
     }
 
-    public String getAddress1() {
-        return address1;
+    public String getAddress() {
+        return address;
     }
 
-    public Branch address1(String address1) {
-        this.address1 = address1;
+    public Branch address(String address) {
+        this.address = address;
         return this;
     }
 
-    public void setAddress1(String address1) {
-        this.address1 = address1;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getAddress2() {
-        return address2;
+    public String getPinCode() {
+        return pinCode;
     }
 
-    public Branch address2(String address2) {
-        this.address2 = address2;
+    public Branch pinCode(String pinCode) {
+        this.pinCode = pinCode;
         return this;
     }
 
-    public void setAddress2(String address2) {
-        this.address2 = address2;
+    public void setPinCode(String pinCode) {
+        this.pinCode = pinCode;
     }
 
     public String getBranchHead() {
@@ -117,6 +162,149 @@ public class Branch implements Serializable, IESEntity {
 
     public void setBranchHead(String branchHead) {
         this.branchHead = branchHead;
+    }
+
+    public String getCellPhoneNo() {
+        return cellPhoneNo;
+    }
+
+    public Branch cellPhoneNo(String cellPhoneNo) {
+        this.cellPhoneNo = cellPhoneNo;
+        return this;
+    }
+
+    public void setCellPhoneNo(String cellPhoneNo) {
+        this.cellPhoneNo = cellPhoneNo;
+    }
+
+    public String getLandLinePhoneNo() {
+        return landLinePhoneNo;
+    }
+
+    public Branch landLinePhoneNo(String landLinePhoneNo) {
+        this.landLinePhoneNo = landLinePhoneNo;
+        return this;
+    }
+
+    public void setLandLinePhoneNo(String landLinePhoneNo) {
+        this.landLinePhoneNo = landLinePhoneNo;
+    }
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public Branch emailId(String emailId) {
+        this.emailId = emailId;
+        return this;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
+
+    public String getFaxNo() {
+        return faxNo;
+    }
+
+    public Branch faxNo(String faxNo) {
+        this.faxNo = faxNo;
+        return this;
+    }
+
+    public void setFaxNo(String faxNo) {
+        this.faxNo = faxNo;
+    }
+
+    public String getIsMainBranch() {
+        return isMainBranch;
+    }
+
+    public Branch isMainBranch(String isMainBranch) {
+        this.isMainBranch = isMainBranch;
+        return this;
+    }
+
+    public void setIsMainBranch(String isMainBranch) {
+        this.isMainBranch = isMainBranch;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public Branch startDate(LocalDate startDate) {
+        this.startDate = startDate;
+        return this;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public Branch createdBy(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDate getCreatedOn() {
+        return createdOn;
+    }
+
+    public Branch createdOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+        return this;
+    }
+
+    public void setCreatedOn(LocalDate createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public Branch updatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+        return this;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDate getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public Branch updatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+        return this;
+    }
+
+    public void setUpdatedOn(LocalDate updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Branch status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public College getCollege() {
@@ -164,19 +352,15 @@ public class Branch implements Serializable, IESEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Branch)) {
             return false;
         }
-        Branch branch = (Branch) o;
-        if (branch.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), branch.getId());
+        return id != null && id.equals(((Branch) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override
@@ -184,9 +368,20 @@ public class Branch implements Serializable, IESEntity {
         return "Branch{" +
             "id=" + getId() +
             ", branchName='" + getBranchName() + "'" +
-            ", address1='" + getAddress1() + "'" +
-            ", address2='" + getAddress2() + "'" +
+            ", address='" + getAddress() + "'" +
+            ", pinCode='" + getPinCode() + "'" +
             ", branchHead='" + getBranchHead() + "'" +
+            ", cellPhoneNo='" + getCellPhoneNo() + "'" +
+            ", landLinePhoneNo='" + getLandLinePhoneNo() + "'" +
+            ", emailId='" + getEmailId() + "'" +
+            ", faxNo='" + getFaxNo() + "'" +
+            ", isMainBranch='" + getIsMainBranch() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
+            ", createdOn='" + getCreatedOn() + "'" +
+            ", updatedBy='" + getUpdatedBy() + "'" +
+            ", updatedOn='" + getUpdatedOn() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }

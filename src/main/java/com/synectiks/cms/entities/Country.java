@@ -1,18 +1,20 @@
 package com.synectiks.cms.entities;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import com.synectiks.commons.interfaces.IESEntity;
-
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A Country.
@@ -24,18 +26,16 @@ import java.util.Objects;
 public class Country implements Serializable, IESEntity {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "country_name", nullable = false)
+    @Column(name = "country_name")
     private String countryName;
 
-    @NotNull
-    @Column(name = "country_code", nullable = false)
+    @Column(name = "country_code")
     private String countryCode;
 
     @Column(name = "isd_code")
@@ -95,19 +95,15 @@ public class Country implements Serializable, IESEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Country)) {
             return false;
         }
-        Country country = (Country) o;
-        if (country.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), country.getId());
+        return id != null && id.equals(((Country) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

@@ -1,16 +1,21 @@
 package com.synectiks.cms.entities;
+import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.synectiks.commons.interfaces.IESEntity;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-
 import org.springframework.data.elasticsearch.annotations.Document;
-import java.io.Serializable;
-import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.synectiks.commons.interfaces.IESEntity;
 
 /**
  * A MetaLecture.
@@ -19,7 +24,7 @@ import java.util.Objects;
 @Table(name = "meta_lecture")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "metalecture")
-public class MetaLecture implements Serializable, IESEntity {
+public class MetaLecture implements Serializable, IESEntity  {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,35 +43,35 @@ public class MetaLecture implements Serializable, IESEntity {
     private String endTime;
 
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("metaLectures")
     private Branch branch;
 
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("metaLectures")
     private Department department;
 
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("metaLectures")
     private Subject subject;
 
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("metaLectures")
     private Teacher teacher;
 
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("metaLectures")
     private Term term;
 
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("metaLectures")
     private AcademicYear academicyear;
 
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("metaLectures")
     private Section section;
 
     @ManyToOne
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties("metaLectures")
     private Batch batch;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -227,19 +232,15 @@ public class MetaLecture implements Serializable, IESEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof MetaLecture)) {
             return false;
         }
-        MetaLecture metaLecture = (MetaLecture) o;
-        if (metaLecture.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), metaLecture.getId());
+        return id != null && id.equals(((MetaLecture) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override
