@@ -1,17 +1,34 @@
 package com.synectiks.cms.entities;
+import java.io.Serializable;
+import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
-import com.synectiks.cms.entities.enumeration.*;
-import com.synectiks.commons.interfaces.IESEntity;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.synectiks.cms.entities.enumeration.Bloodgroup;
+import com.synectiks.cms.entities.enumeration.Caste;
+import com.synectiks.cms.entities.enumeration.Gender;
+import com.synectiks.cms.entities.enumeration.RelationWithStudentEnum;
+import com.synectiks.cms.entities.enumeration.Religion;
+import com.synectiks.cms.entities.enumeration.Status;
+import com.synectiks.cms.entities.enumeration.StudentTypeEnum;
+import com.synectiks.commons.interfaces.IESEntity;
 
 /**
  * A Student.
@@ -20,7 +37,7 @@ import java.util.Objects;
 @Table(name = "student")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "student")
-public class Student implements Serializable, IESEntity {
+public class Student implements IESEntity, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -78,6 +95,8 @@ public class Student implements Serializable, IESEntity {
     private String studentPassportNo;
 
     @Column(name = "date_of_birth")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate dateOfBirth;
 
     @Column(name = "place_of_birth")
@@ -356,6 +375,8 @@ public class Student implements Serializable, IESEntity {
     private String disabilityCertificateIssueAuthority;
 
     @Column(name = "disability_certificate_issue_date")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate disabilityCertificateIssueDate;
 
     @Column(name = "percentag_of_disability")
@@ -381,12 +402,16 @@ public class Student implements Serializable, IESEntity {
     private String createdBy;
 
     @Column(name = "created_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate createdOn;
 
     @Column(name = "updated_by")
     private String updatedBy;
 
     @Column(name = "updated_on")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate updatedOn;
 
     @Column(name = "comments")
@@ -407,6 +432,21 @@ public class Student implements Serializable, IESEntity {
     @Column(name = "academic_year_id")
     private Long academicYearId;
 
+    @javax.persistence.Transient
+    private String branchName;
+    
+    @javax.persistence.Transient
+    private String departmentName;
+    
+    @javax.persistence.Transient
+    private String batchName;
+    
+    @javax.persistence.Transient
+    private String sectionName;
+    
+    @javax.persistence.Transient
+    private String academicYear;
+    
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -2022,129 +2062,179 @@ public class Student implements Serializable, IESEntity {
     @Override
     public String toString() {
         return "Student{" +
-                "id=" + getId() +
-                ", studentName='" + getStudentName() + "'" +
-                ", studentMiddleName='" + getStudentMiddleName() + "'" +
-                ", studentLastName='" + getStudentLastName() + "'" +
-                ", fatherName='" + getFatherName() + "'" +
-                ", fatherMiddleName='" + getFatherMiddleName() + "'" +
-                ", fatherLastName='" + getFatherLastName() + "'" +
-                ", motherName='" + getMotherName() + "'" +
-                ", motherMiddleName='" + getMotherMiddleName() + "'" +
-                ", motherLastName='" + getMotherLastName() + "'" +
-                ", studentAadharNo='" + getStudentAadharNo() + "'" +
-                ", studentPanNo='" + getStudentPanNo() + "'" +
-                ", studentSocialSecurityNo='" + getStudentSocialSecurityNo() + "'" +
-                ", studentTaxReferenceNo='" + getStudentTaxReferenceNo() + "'" +
-                ", studentBplNo='" + getStudentBplNo() + "'" +
-                ", studentDrivingLicenseNo='" + getStudentDrivingLicenseNo() + "'" +
-                ", studentPassportNo='" + getStudentPassportNo() + "'" +
-                ", dateOfBirth='" + getDateOfBirth() + "'" +
-                ", placeOfBirth='" + getPlaceOfBirth() + "'" +
-                ", religion='" + getReligion() + "'" +
-                ", caste='" + getCaste() + "'" +
-                ", subCaste='" + getSubCaste() + "'" +
-                ", age=" + getAge() +
-                ", sex='" + getSex() + "'" +
-                ", studentLocalAddress='" + getStudentLocalAddress() + "'" +
-                ", studentPermanentAddress='" + getStudentPermanentAddress() + "'" +
-                ", city='" + getCity() + "'" +
-                ", state='" + getState() + "'" +
-                ", country='" + getCountry() + "'" +
-                ", pinCode='" + getPinCode() + "'" +
-                ", studentPrimaryCellNumber='" + getStudentPrimaryCellNumber() + "'" +
-                ", studentAlternateCellNumber='" + getStudentAlternateCellNumber() + "'" +
-                ", studentLandLinePhoneNumber='" + getStudentLandLinePhoneNumber() + "'" +
-                ", studentPrimaryEmailId='" + getStudentPrimaryEmailId() + "'" +
-                ", studentAlternateEmailId='" + getStudentAlternateEmailId() + "'" +
-                ", relationWithStudent='" + getRelationWithStudent() + "'" +
-                ", emergencyContactName='" + getEmergencyContactName() + "'" +
-                ", emergencyContactMiddleName='" + getEmergencyContactMiddleName() + "'" +
-                ", emergencyContactLastName='" + getEmergencyContactLastName() + "'" +
-                ", emergencyContactCellNumber='" + getEmergencyContactCellNumber() + "'" +
-                ", emergencyContactLandLinePhoneNumber='" + getEmergencyContactLandLinePhoneNumber() + "'" +
-                ", emergencyContactEmailId='" + getEmergencyContactEmailId() + "'" +
-                ", studentImagePath='" + getStudentImagePath() + "'" +
-                ", admissionNo='" + getAdmissionNo() + "'" +
-                ", enrollmentNo='" + getEnrollmentNo() + "'" +
-                ", rollNo='" + getRollNo() + "'" +
-                ", studentType='" + getStudentType() + "'" +
-                ", fatherCellNumber='" + getFatherCellNumber() + "'" +
-                ", fatherEmailId='" + getFatherEmailId() + "'" +
-                ", fatherOccupation='" + getFatherOccupation() + "'" +
-                ", fatherOfficeEmailId='" + getFatherOfficeEmailId() + "'" +
-                ", fatherOfficeAddress='" + getFatherOfficeAddress() + "'" +
-                ", fatherOfficeCellNumber='" + getFatherOfficeCellNumber() + "'" +
-                ", fatherOfficeLandLinePhoneNumber='" + getFatherOfficeLandLinePhoneNumber() + "'" +
-                ", fatherAadharNo='" + getFatherAadharNo() + "'" +
-                ", fatherPanNo='" + getFatherPanNo() + "'" +
-                ", fatherSocialSecurityNo='" + getFatherSocialSecurityNo() + "'" +
-                ", fatherTaxReferenceNo='" + getFatherTaxReferenceNo() + "'" +
-                ", fatherBplNo='" + getFatherBplNo() + "'" +
-                ", fatherDrivingLicenseNo='" + getFatherDrivingLicenseNo() + "'" +
-                ", fatherPassportNo='" + getFatherPassportNo() + "'" +
-                ", fatherImagePath='" + getFatherImagePath() + "'" +
-                ", motherCellNumber='" + getMotherCellNumber() + "'" +
-                ", motherEmailId='" + getMotherEmailId() + "'" +
-                ", motherOccupation='" + getMotherOccupation() + "'" +
-                ", motherOfficeEmailId='" + getMotherOfficeEmailId() + "'" +
-                ", motherOfficeAddress='" + getMotherOfficeAddress() + "'" +
-                ", motherOfficeCellNumber='" + getMotherOfficeCellNumber() + "'" +
-                ", motherOfficeLandLinePhoneNumber='" + getMotherOfficeLandLinePhoneNumber() + "'" +
-                ", motherAadharNo='" + getMotherAadharNo() + "'" +
-                ", motherPanNo='" + getMotherPanNo() + "'" +
-                ", motherSocialSecurityNo='" + getMotherSocialSecurityNo() + "'" +
-                ", motherTaxReferenceNo='" + getMotherTaxReferenceNo() + "'" +
-                ", motherBplNo='" + getMotherBplNo() + "'" +
-                ", motherDrivingLicenseNo='" + getMotherDrivingLicenseNo() + "'" +
-                ", motherPassportNo='" + getMotherPassportNo() + "'" +
-                ", motherImagePath='" + getMotherImagePath() + "'" +
-                ", guardianName='" + getGuardianName() + "'" +
-                ", guardianMiddleName='" + getGuardianMiddleName() + "'" +
-                ", guardianLastName='" + getGuardianLastName() + "'" +
-                ", guardianAddress='" + getGuardianAddress() + "'" +
-                ", guardianCellNumber='" + getGuardianCellNumber() + "'" +
-                ", guardianLandLinePhoneNumber='" + getGuardianLandLinePhoneNumber() + "'" +
-                ", guardianEmailId='" + getGuardianEmailId() + "'" +
-                ", guardianOccupation='" + getGuardianOccupation() + "'" +
-                ", guardianOfficeEmailId='" + getGuardianOfficeEmailId() + "'" +
-                ", guardianOfficeAddress='" + getGuardianOfficeAddress() + "'" +
-                ", guardianOfficeCellNumber='" + getGuardianOfficeCellNumber() + "'" +
-                ", guardianOfficeLandLinePhoneNumber='" + getGuardianOfficeLandLinePhoneNumber() + "'" +
-                ", guardianImagePath='" + getGuardianImagePath() + "'" +
-                ", isGuardianSponsorAgency='" + getIsGuardianSponsorAgency() + "'" +
-                ", sponsorAgencyName='" + getSponsorAgencyName() + "'" +
-                ", sponsorAgencyRegistrationNo='" + getSponsorAgencyRegistrationNo() + "'" +
-                ", sponsorAgencyAddress='" + getSponsorAgencyAddress() + "'" +
-                ", sponsorAgencyCellNumber='" + getSponsorAgencyCellNumber() + "'" +
-                ", sponsorAgencyLandLineNumber='" + getSponsorAgencyLandLineNumber() + "'" +
-                ", sponsorAgencyEmailId='" + getSponsorAgencyEmailId() + "'" +
-                ", sponsorAgencyAppointeeName='" + getSponsorAgencyAppointeeName() + "'" +
-                ", sponsorAgencyAppointeeDesignation='" + getSponsorAgencyAppointeeDesignation() + "'" +
-                ", sponsorAgencyAppointeeCellNumber='" + getSponsorAgencyAppointeeCellNumber() + "'" +
-                ", sponsorAgencyAppointeeLandLineNumber='" + getSponsorAgencyAppointeeLandLineNumber() + "'" +
-                ", sponsorAgencyAppointeeEmailId='" + getSponsorAgencyAppointeeEmailId() + "'" +
-                ", sponsorAgencyAppointeeOfficeAddress='" + getSponsorAgencyAppointeeOfficeAddress() + "'" +
-                ", isPhysicallyChallenged='" + getIsPhysicallyChallenged() + "'" +
-                ", detailsOfDisability='" + getDetailsOfDisability() + "'" +
-                ", disabilityCertificateNo='" + getDisabilityCertificateNo() + "'" +
-                ", disabilityCertificateIssueAuthority='" + getDisabilityCertificateIssueAuthority() + "'" +
-                ", disabilityCertificateIssueDate='" + getDisabilityCertificateIssueDate() + "'" +
-                ", percentagOfDisability=" + getPercentagOfDisability() +
-                ", bloodGroup='" + getBloodGroup() + "'" +
-                ", vaccinationDetails='" + getVaccinationDetails() + "'" +
-                ", otherMedicalDetails='" + getOtherMedicalDetails() + "'" +
-                ", status='" + getStatus() + "'" +
-                ", createdBy='" + getCreatedBy() + "'" +
-                ", createdOn='" + getCreatedOn() + "'" +
-                ", updatedBy='" + getUpdatedBy() + "'" +
-                ", updatedOn='" + getUpdatedOn() + "'" +
-                ", comments='" + getComments() + "'" +
-                ", departmentId=" + getDepartmentId() +
-                ", branchId=" + getBranchId() +
-                ", sectionId=" + getSectionId() +
-                ", batchId=" + getBatchId() +
-                ", academicYearId=" + getAcademicYearId() +
-                "}";
+            "id=" + getId() +
+            ", studentName='" + getStudentName() + "'" +
+            ", studentMiddleName='" + getStudentMiddleName() + "'" +
+            ", studentLastName='" + getStudentLastName() + "'" +
+            ", fatherName='" + getFatherName() + "'" +
+            ", fatherMiddleName='" + getFatherMiddleName() + "'" +
+            ", fatherLastName='" + getFatherLastName() + "'" +
+            ", motherName='" + getMotherName() + "'" +
+            ", motherMiddleName='" + getMotherMiddleName() + "'" +
+            ", motherLastName='" + getMotherLastName() + "'" +
+            ", studentAadharNo='" + getStudentAadharNo() + "'" +
+            ", studentPanNo='" + getStudentPanNo() + "'" +
+            ", studentSocialSecurityNo='" + getStudentSocialSecurityNo() + "'" +
+            ", studentTaxReferenceNo='" + getStudentTaxReferenceNo() + "'" +
+            ", studentBplNo='" + getStudentBplNo() + "'" +
+            ", studentDrivingLicenseNo='" + getStudentDrivingLicenseNo() + "'" +
+            ", studentPassportNo='" + getStudentPassportNo() + "'" +
+            ", dateOfBirth='" + getDateOfBirth() + "'" +
+            ", placeOfBirth='" + getPlaceOfBirth() + "'" +
+            ", religion='" + getReligion() + "'" +
+            ", caste='" + getCaste() + "'" +
+            ", subCaste='" + getSubCaste() + "'" +
+            ", age=" + getAge() +
+            ", sex='" + getSex() + "'" +
+            ", studentLocalAddress='" + getStudentLocalAddress() + "'" +
+            ", studentPermanentAddress='" + getStudentPermanentAddress() + "'" +
+            ", city='" + getCity() + "'" +
+            ", state='" + getState() + "'" +
+            ", country='" + getCountry() + "'" +
+            ", pinCode='" + getPinCode() + "'" +
+            ", studentPrimaryCellNumber='" + getStudentPrimaryCellNumber() + "'" +
+            ", studentAlternateCellNumber='" + getStudentAlternateCellNumber() + "'" +
+            ", studentLandLinePhoneNumber='" + getStudentLandLinePhoneNumber() + "'" +
+            ", studentPrimaryEmailId='" + getStudentPrimaryEmailId() + "'" +
+            ", studentAlternateEmailId='" + getStudentAlternateEmailId() + "'" +
+            ", relationWithStudent='" + getRelationWithStudent() + "'" +
+            ", emergencyContactName='" + getEmergencyContactName() + "'" +
+            ", emergencyContactMiddleName='" + getEmergencyContactMiddleName() + "'" +
+            ", emergencyContactLastName='" + getEmergencyContactLastName() + "'" +
+            ", emergencyContactCellNumber='" + getEmergencyContactCellNumber() + "'" +
+            ", emergencyContactLandLinePhoneNumber='" + getEmergencyContactLandLinePhoneNumber() + "'" +
+            ", emergencyContactEmailId='" + getEmergencyContactEmailId() + "'" +
+            ", studentImagePath='" + getStudentImagePath() + "'" +
+            ", admissionNo='" + getAdmissionNo() + "'" +
+            ", enrollmentNo='" + getEnrollmentNo() + "'" +
+            ", rollNo='" + getRollNo() + "'" +
+            ", studentType='" + getStudentType() + "'" +
+            ", fatherCellNumber='" + getFatherCellNumber() + "'" +
+            ", fatherEmailId='" + getFatherEmailId() + "'" +
+            ", fatherOccupation='" + getFatherOccupation() + "'" +
+            ", fatherOfficeEmailId='" + getFatherOfficeEmailId() + "'" +
+            ", fatherOfficeAddress='" + getFatherOfficeAddress() + "'" +
+            ", fatherOfficeCellNumber='" + getFatherOfficeCellNumber() + "'" +
+            ", fatherOfficeLandLinePhoneNumber='" + getFatherOfficeLandLinePhoneNumber() + "'" +
+            ", fatherAadharNo='" + getFatherAadharNo() + "'" +
+            ", fatherPanNo='" + getFatherPanNo() + "'" +
+            ", fatherSocialSecurityNo='" + getFatherSocialSecurityNo() + "'" +
+            ", fatherTaxReferenceNo='" + getFatherTaxReferenceNo() + "'" +
+            ", fatherBplNo='" + getFatherBplNo() + "'" +
+            ", fatherDrivingLicenseNo='" + getFatherDrivingLicenseNo() + "'" +
+            ", fatherPassportNo='" + getFatherPassportNo() + "'" +
+            ", fatherImagePath='" + getFatherImagePath() + "'" +
+            ", motherCellNumber='" + getMotherCellNumber() + "'" +
+            ", motherEmailId='" + getMotherEmailId() + "'" +
+            ", motherOccupation='" + getMotherOccupation() + "'" +
+            ", motherOfficeEmailId='" + getMotherOfficeEmailId() + "'" +
+            ", motherOfficeAddress='" + getMotherOfficeAddress() + "'" +
+            ", motherOfficeCellNumber='" + getMotherOfficeCellNumber() + "'" +
+            ", motherOfficeLandLinePhoneNumber='" + getMotherOfficeLandLinePhoneNumber() + "'" +
+            ", motherAadharNo='" + getMotherAadharNo() + "'" +
+            ", motherPanNo='" + getMotherPanNo() + "'" +
+            ", motherSocialSecurityNo='" + getMotherSocialSecurityNo() + "'" +
+            ", motherTaxReferenceNo='" + getMotherTaxReferenceNo() + "'" +
+            ", motherBplNo='" + getMotherBplNo() + "'" +
+            ", motherDrivingLicenseNo='" + getMotherDrivingLicenseNo() + "'" +
+            ", motherPassportNo='" + getMotherPassportNo() + "'" +
+            ", motherImagePath='" + getMotherImagePath() + "'" +
+            ", guardianName='" + getGuardianName() + "'" +
+            ", guardianMiddleName='" + getGuardianMiddleName() + "'" +
+            ", guardianLastName='" + getGuardianLastName() + "'" +
+            ", guardianAddress='" + getGuardianAddress() + "'" +
+            ", guardianCellNumber='" + getGuardianCellNumber() + "'" +
+            ", guardianLandLinePhoneNumber='" + getGuardianLandLinePhoneNumber() + "'" +
+            ", guardianEmailId='" + getGuardianEmailId() + "'" +
+            ", guardianOccupation='" + getGuardianOccupation() + "'" +
+            ", guardianOfficeEmailId='" + getGuardianOfficeEmailId() + "'" +
+            ", guardianOfficeAddress='" + getGuardianOfficeAddress() + "'" +
+            ", guardianOfficeCellNumber='" + getGuardianOfficeCellNumber() + "'" +
+            ", guardianOfficeLandLinePhoneNumber='" + getGuardianOfficeLandLinePhoneNumber() + "'" +
+            ", guardianImagePath='" + getGuardianImagePath() + "'" +
+            ", isGuardianSponsorAgency='" + getIsGuardianSponsorAgency() + "'" +
+            ", sponsorAgencyName='" + getSponsorAgencyName() + "'" +
+            ", sponsorAgencyRegistrationNo='" + getSponsorAgencyRegistrationNo() + "'" +
+            ", sponsorAgencyAddress='" + getSponsorAgencyAddress() + "'" +
+            ", sponsorAgencyCellNumber='" + getSponsorAgencyCellNumber() + "'" +
+            ", sponsorAgencyLandLineNumber='" + getSponsorAgencyLandLineNumber() + "'" +
+            ", sponsorAgencyEmailId='" + getSponsorAgencyEmailId() + "'" +
+            ", sponsorAgencyAppointeeName='" + getSponsorAgencyAppointeeName() + "'" +
+            ", sponsorAgencyAppointeeDesignation='" + getSponsorAgencyAppointeeDesignation() + "'" +
+            ", sponsorAgencyAppointeeCellNumber='" + getSponsorAgencyAppointeeCellNumber() + "'" +
+            ", sponsorAgencyAppointeeLandLineNumber='" + getSponsorAgencyAppointeeLandLineNumber() + "'" +
+            ", sponsorAgencyAppointeeEmailId='" + getSponsorAgencyAppointeeEmailId() + "'" +
+            ", sponsorAgencyAppointeeOfficeAddress='" + getSponsorAgencyAppointeeOfficeAddress() + "'" +
+            ", isPhysicallyChallenged='" + getIsPhysicallyChallenged() + "'" +
+            ", detailsOfDisability='" + getDetailsOfDisability() + "'" +
+            ", disabilityCertificateNo='" + getDisabilityCertificateNo() + "'" +
+            ", disabilityCertificateIssueAuthority='" + getDisabilityCertificateIssueAuthority() + "'" +
+            ", disabilityCertificateIssueDate='" + getDisabilityCertificateIssueDate() + "'" +
+            ", percentagOfDisability=" + getPercentagOfDisability() +
+            ", bloodGroup='" + getBloodGroup() + "'" +
+            ", vaccinationDetails='" + getVaccinationDetails() + "'" +
+            ", otherMedicalDetails='" + getOtherMedicalDetails() + "'" +
+            ", status='" + getStatus() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
+            ", createdOn='" + getCreatedOn() + "'" +
+            ", updatedBy='" + getUpdatedBy() + "'" +
+            ", updatedOn='" + getUpdatedOn() + "'" +
+            ", comments='" + getComments() + "'" +
+            ", departmentId=" + getDepartmentId() +
+            ", branchId=" + getBranchId() +
+            ", sectionId=" + getSectionId() +
+            ", batchId=" + getBatchId() +
+            ", academicYearId=" + getAcademicYearId() +
+            "}";
     }
+
+    @javax.persistence.Transient
+	public String getBranchName() {
+		return branchName;
+	}
+
+    @javax.persistence.Transient
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
+
+    @javax.persistence.Transient
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+    @javax.persistence.Transient
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+    @javax.persistence.Transient
+	public String getBatchName() {
+		return batchName;
+	}
+
+    @javax.persistence.Transient
+	public void setBatchName(String batchName) {
+		this.batchName = batchName;
+	}
+
+    @javax.persistence.Transient
+	public String getSectionName() {
+		return sectionName;
+	}
+
+    @javax.persistence.Transient
+	public void setSectionName(String sectionName) {
+		this.sectionName = sectionName;
+	}
+
+    @javax.persistence.Transient
+	public String getAcademicYear() {
+		return academicYear;
+	}
+
+    @javax.persistence.Transient
+	public void setAcademicYear(String academicYear) {
+		this.academicYear = academicYear;
+	}
 }

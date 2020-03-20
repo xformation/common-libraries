@@ -4,5 +4,5 @@ package com.synectiks.cms.entities.enumeration;
  * The BatchEnum enumeration.
  */
 public enum BatchEnum {
-    FIRSTYEAR, SECONDYEAR, THIRDYEAR, FOURTHYEAR
+    FIRSTYEAR, SECONDYEAR, THIRDYEAR, FOURTHYEAR, FIFTHYEAR
 }
