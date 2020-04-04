@@ -13,14 +13,12 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.elasticsearch.annotations.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.synectiks.commons.interfaces.IESEntity;
 
 /**
  * A Lecture.
@@ -28,8 +26,7 @@ import com.synectiks.commons.interfaces.IESEntity;
 @Entity
 @Table(name = "lecture")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Document(indexName = "lecture")
-public class Lecture implements Serializable, IESEntity {
+public class Lecture implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
