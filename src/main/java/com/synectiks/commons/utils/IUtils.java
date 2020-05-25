@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -101,6 +103,65 @@ import com.synectiks.commons.entities.oak.OakFileNode;
  * @author Rajesh
  */
 public interface IUtils {
+
+	/**
+	 * JSON value's class type<br/>
+	 * String|Text|Integer|Long|Double|Date|Boolean|Object
+	 * @author Rajesh Upadhyay
+	 */
+	enum CTypes {
+		Array,
+		Boolean,
+		Date,
+		Double,
+		Integer,
+		Long,
+		Object,
+		String,
+		Text;
+
+		/**
+		 * Returns true if type is member or CTypes.
+		 * @param type
+		 * @return
+		 */
+		public static boolean isMember(String type) {
+			for (CTypes tp : CTypes.values()) {
+				if (tp.name().equals(type)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/**
+		 * Method to check if the type is number type.
+		 * @param type
+		 * @return
+		 */
+		public static boolean isNumber(String type) {
+			if (Double.name().equals(type) || Long.name().equals(type) ||
+					Integer.name().equals(type)) {
+				return true;
+			}
+			return false;
+		}
+
+		/**
+		 * Method to check if type is native type
+		 * @param type
+		 * @return
+		 */
+		public static boolean isNativeType(String type) {
+			if (CTypes.Array.name().equals(type) ||
+					CTypes.Object.name().equals(type)) {
+				return false;
+			} else if (isMember(type)) {
+				return true;
+			}
+			return false;
+		}
+	}
 
 	Logger logger = LoggerFactory.getLogger(IUtils.class);
 
@@ -199,6 +260,109 @@ public interface IUtils {
 			}
 		}
 		return entity;
+	}
+
+	/**
+	 * Method check the value class type
+	 * @param val
+	 * @return CType value
+	 */
+	static CTypes getValueClassType(Object val) {
+		CTypes type = null;
+		if (!IUtils.isNull(val)) {
+			if (val instanceof Boolean) {
+				type = CTypes.Boolean;
+			} else if (val instanceof Number) {
+				if (String.valueOf(val).contains(".")) {
+					type = CTypes.Double;
+				} else {
+					type = CTypes.Long;
+				}
+			} else if (val instanceof JSONArray) {
+				type = CTypes.Array;
+			} else if (val instanceof JSONObject) {
+				type = CTypes.Object;
+			} /*else if (val instanceof String) {
+				String str = (String) val;
+				if (str.matches("^[\\d\\.,]+$") && !str.matches("^[\\.]+$") &&
+						!str.matches("^[,]+$") && !str.endsWith(".") &&
+						!str.endsWith(",")) {
+					if (String.valueOf(val).contains(".")) {
+						type = CTypes.Double;
+					} else {
+						type = CTypes.Long;
+					}
+				} else {
+					type = CTypes.String;
+				}
+			}*/ else { 
+				// Unknown and default type
+				type = CTypes.String;
+			}
+		}
+		return type;
+	}
+
+	/**
+	 * Method to find json array values type name.
+	 * @param val
+	 * @return
+	 */
+	static CTypes getArrValType(Object val) {
+		CTypes type = null;
+		if (!isNull(val) && val instanceof JSONArray) {
+			JSONArray arr = (JSONArray) val;
+			if (arr.length() > 0 ) {
+				type = getValueClassType(arr.opt(0));
+			}
+		}
+		return type;
+	}
+
+	/**
+	 * Method to get first object from array.
+	 * @param val
+	 * @return
+	 */
+	static Object getArrFirstVal(Object val) {
+		if (!isNull(val) && val instanceof JSONArray) {
+			JSONArray arr = (JSONArray) val;
+			if (arr.length() > 0 ) {
+				return arr.opt(0);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Method to check if file exists on file system.
+	 * @param path
+	 * @return
+	 */
+	static boolean isFileExists(String path) {
+		if (!isNullOrEmpty(path)) {
+			if (new File(path).exists()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Method to create list of json keys
+	 * @param json
+	 * @return
+	 */
+	static List<String> getJsonKeys(JSONObject json) {
+		List<String> lst = new ArrayList<>();
+		if (!isNull(json)) {
+			@SuppressWarnings("rawtypes")
+			Iterator it = json.keys();
+			while (it.hasNext()) {
+				lst.add((String) it.next());
+			}
+		}
+		return lst;
 	}
 
 	/**
@@ -771,8 +935,8 @@ public interface IUtils {
 					}
 				}
 				res = json.toString();
-			} else if (val instanceof List) {
-				res = getStringFromValue(new JSONArray((List<?>) val));
+			} else if (val instanceof Collection) {
+				res = getStringFromValue(new JSONArray((Collection<?>) val));
 			} else {
 				try {
 					res = OBJECT_MAPPER.writeValueAsString(val);
@@ -1527,21 +1691,7 @@ public interface IUtils {
 	 */
 	static String changeFirstCharCaseOfWords(String input, boolean isCaps) {
 		if (!isNullOrEmpty(input)) {
-			StringBuilder sb = new StringBuilder();
-			char ch = ' ';
-			for (int i = 0; i < input.length(); i++) {
-				if (ch == ' ' && input.charAt(i) != ' ') {
-					if (isCaps) {
-						sb.append(Character.toUpperCase(input.charAt(i)));
-					} else {
-						sb.append(Character.toLowerCase(input.charAt(i)));
-					}
-				} else {
-					sb.append(input.charAt(i));
-				}
-				ch = input.charAt(i);
-			}
-			return sb.toString().trim();
+			return StringUtils.capitalize(input.trim());
 		}
 		return null;
 	}
