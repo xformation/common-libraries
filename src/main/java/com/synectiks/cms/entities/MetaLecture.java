@@ -12,10 +12,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.elasticsearch.annotations.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.synectiks.commons.interfaces.IESEntity;
 
 /**
  * A MetaLecture.
@@ -23,8 +21,7 @@ import com.synectiks.commons.interfaces.IESEntity;
 @Entity
 @Table(name = "meta_lecture")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Document(indexName = "metalecture")
-public class MetaLecture implements Serializable, IESEntity  {
+public class MetaLecture implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
