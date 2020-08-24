@@ -5,6 +5,7 @@ package com.synectiks.commons.entities;
 
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -43,6 +44,7 @@ public class Policy extends PSqlEntity {
 	private String name;
 	private String entity;
 	private boolean searchable;
+	@ElementCollection(targetClass = Long.class)
 	private List<Long> rules;
 	private String description;
 

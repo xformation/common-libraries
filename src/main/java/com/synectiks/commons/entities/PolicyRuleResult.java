@@ -5,6 +5,7 @@ package com.synectiks.commons.entities;
 
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -27,6 +28,7 @@ public class PolicyRuleResult extends PSqlEntity {
 	private long tookInMillis;
 	private long policyId;
 	private long ruleId;
+	@ElementCollection(targetClass = String.class)
 	private List<String> hits;
 	private boolean timeOut;
 	private boolean terminatedEarly;
