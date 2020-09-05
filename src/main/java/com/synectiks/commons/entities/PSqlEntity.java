@@ -34,14 +34,14 @@ public abstract class PSqlEntity implements Serializable {
 		allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
 		generator = ATTR_ID_SEQ)
-	protected long id;
+	protected Long id;
 
 	protected Date createdAt;
 	protected Date updatedAt;
 	protected String createdBy;
 	protected String updatedBy;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -61,7 +61,7 @@ public abstract class PSqlEntity implements Serializable {
 		return updatedBy;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
