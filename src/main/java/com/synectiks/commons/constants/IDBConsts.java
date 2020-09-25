@@ -11,6 +11,8 @@ public interface IDBConsts {
 	String Tbl_ACTION = "Action";
 	String Tbl_ACTIVITY = "Activity";
 	String Tbl_CATEGORY = "Category";
+	String Tbl_CLOUD_ACC = "CloudAccounts";
+	String Tbl_CUSTOMER = "Customers";
 	String Tbl_PAYMENT = "Payment";
 	String Tbl_PERMISSION = "Permission";
 	String Tbl_RATING = "Rating";
