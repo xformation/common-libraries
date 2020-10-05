@@ -15,9 +15,12 @@ import com.synectiks.commons.constants.IDBConsts;
  * Sample Policy:
  * <pre> * {
  *	"name": "policy-name",
+ *	"entity": "entity-name",
+ *	"searchable": true,
  *	"description": "",
  *	"rules": [
  *		{
+ *			"id": 1,
  *			"name": "rule-name",
  *			"entity": "entity-name",
  *			"description": "",

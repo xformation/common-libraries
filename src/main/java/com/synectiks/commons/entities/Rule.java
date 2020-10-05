@@ -17,9 +17,9 @@ import com.synectiks.commons.constants.IDBConsts;
  *	{
  *		"name": "rule-name",
  *		"entity": "entity-name",
- *      "searchable": true,
+ *		"searchable": true,
  *		"description": "",
- *		"checks: [
+ *		"checks": [
  *			"key > 10",
  *			"key regex('^R.*esh$')",
  *			"key isNotEmpty",
