@@ -26,7 +26,7 @@ public class Customer extends PSqlEntity {
 	private String password;
 	private String email;
 	private String mobile;
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(targetEntity = CloudAccount.class, cascade = CascadeType.PERSIST)
 	private List<CloudAccount> accounts;
 
 	public String getName() {
