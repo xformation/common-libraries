@@ -28,8 +28,9 @@ public interface IApiController {
 	String PLC_API = API_PATH + "/policy";
 	String RULE_API = API_PATH + "/rule";
 	String QRY_API = API_PATH + "/query";
-	String CLOUD_API = API_PATH + "cloudAcc";
-	String CUSTOMER_API = API_PATH + "customer";
+	String CLOUD_ENTITY = API_PATH + "/cloudEntity";
+	String CLOUD_API = API_PATH + "/cloudAcc";
+	String CUSTOMER_API = API_PATH + "/customer";
 	
 	String URL_ACTION = "/action";
 	String URL_ACTIVITY = "/activity";
