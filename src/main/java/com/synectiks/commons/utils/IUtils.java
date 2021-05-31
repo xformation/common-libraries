@@ -354,12 +354,30 @@ public interface IUtils {
 	 * @return
 	 */
 	static List<String> getJsonKeys(JSONObject json) {
+		return getJsonKeys(json, false);
+	}
+
+	/**
+	 * Method to create list of json keys
+	 * @param json
+	 * @param nested true if list should have nested keys.
+	 * @return
+	 */
+	static List<String> getJsonKeys(JSONObject json, boolean nested) {
 		List<String> lst = new ArrayList<>();
 		if (!isNull(json)) {
 			@SuppressWarnings("rawtypes")
 			Iterator it = json.keys();
 			while (it.hasNext()) {
-				lst.add((String) it.next());
+				String key = (String) it.next();
+				if (nested && !isNull(json.optJSONObject(key))) {
+					List<String> nslst = getJsonKeys(json.optJSONObject(key), nested);
+					nslst.forEach(k -> {
+						lst.add(key + "." + k);
+					});
+				} else {
+					lst.add(key);
+				}
 			}
 		}
 		return lst;
@@ -1709,5 +1727,26 @@ public interface IUtils {
 			});
 		}
 		return lst;
+	}
+
+	/**
+	 * Method to list key which match with the wildcard key.
+	 * @param entity
+	 * @param key
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	static List<String> listMatchingKeys(JSONObject entity, String key) {
+		List<String> keys = new ArrayList<>();
+		if (!isNull(entity) && !isNullOrEmpty(key)) {
+			Iterator it = entity.keys();
+			while (it.hasNext()) {
+				String k = (String) it.next();
+				if (!isNullOrEmpty(k) && k.matches(key)) {
+					keys.add(k);
+				}
+			}
+		}
+		return keys;
 	}
 }
