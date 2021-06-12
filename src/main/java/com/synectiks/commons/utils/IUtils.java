@@ -866,15 +866,16 @@ public interface IUtils {
 	/**
 	 * Method to call a rest service using GET method url and params
 	 * @param url fully qualified url for rest service
-	 * @param headers {@code Map<String, String>}
 	 * @param params {@code Map<String, Object>}
 	 * @return {@code HttpResponse} as string
 	 * @throws Exception
 	 */
-	static List<String> sendGetRestReq(RestTemplate rstTmplt, String url, Map<String, String> headers,
+	static List<String> sendGetRestReq(RestTemplate rstTmplt, String url,
 			Map<String, Object> params) throws Exception {
 		List<String> lst = null;
-		ResponseEntity<List<String>> respLst = rstTmplt.exchange(url, HttpMethod.GET, null,
+		// add params if any
+		String uri = addParamsInUrl(url, params);
+		ResponseEntity<List<String>> respLst = rstTmplt.exchange(uri, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<String>>() {});
 		if (!isNull(respLst)) {
 			lst = respLst.getBody();
