@@ -46,13 +46,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -71,6 +71,7 @@ import org.elasticsearch.search.SearchHits;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -677,9 +678,9 @@ public interface IUtils {
 			Map<String, File> files) throws Exception {
 		Assert.assertNotNull("Rest multipart post request url must not be null", url);
 		String res = null;
+		HttpPost post = new HttpPost(url);
+		CloseableHttpClient client = HttpClientBuilder.create().build();
 		try {
-			HttpClient client = HttpClientBuilder.create().build();
-			HttpPost post = new HttpPost(url);
 			MultipartEntityBuilder fEntity = MultipartEntityBuilder.create();
 			// Add additional params
 			if (!isNull(params)) {
@@ -702,6 +703,13 @@ public interface IUtils {
 			}
 		} catch (Throwable e) {
 			throw new Exception(e.getMessage(), e);
+		} finally {
+			if (!isNull(post)) {
+				post.releaseConnection();
+			}
+			if (!isNull(client)) {
+				client.close();
+			}
 		}
 		return res;
 	}
@@ -750,9 +758,9 @@ public interface IUtils {
 	 */
 	static org.apache.http.HttpEntity getPostResponseEntity(String url,
 			Map<String, Object> params) throws Exception {
+		CloseableHttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(url);
 		try {
-			HttpClient client = HttpClientBuilder.create().build();
-			HttpPost post = new HttpPost(url);
 			if (!isNull(params)) {
 				logger.info("Params: " + params);
 				post.setEntity(new UrlEncodedFormEntity(getNameValuePairList(params)));
@@ -771,6 +779,13 @@ public interface IUtils {
 			logger.info("Exception occured while hitting url '" + url + "': "
 					+ e.getMessage());
 			throw e;
+		} finally {
+			if (!isNull(post)) {
+				post.releaseConnection();
+			}
+			if (!isNull(client)) {
+				client.close();
+			}
 		}
 		return null;
 	}
@@ -814,9 +829,9 @@ public interface IUtils {
 
 		Assert.assertNotNull("Rest post request url must not be null", url);
 		Object res = null;
+		CloseableHttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(url);
 		try {
-			HttpClient client = HttpClientBuilder.create().build();
-			HttpPost post = new HttpPost(url);
 			if (!isNull(headers)) {
 				headers.keySet().forEach((key) -> {
 					post.addHeader(key, headers.get(key));
@@ -836,9 +851,35 @@ public interface IUtils {
 		} catch (Throwable e) {
 			logger.info("Exception occured while hitting url : " + url + " "
 					+ e.getMessage());
+		} finally {
+			if (!isNull(post)) {
+				post.releaseConnection();
+			}
+			if (!isNull(client)) {
+				client.close();
+			}
 		}
 		logger.info("Response after hitting url : " + url + " " + res);
 		return res;
+	}
+
+	/**
+	 * Method to call a rest service using GET method url and params
+	 * @param url fully qualified url for rest service
+	 * @param headers {@code Map<String, String>}
+	 * @param params {@code Map<String, Object>}
+	 * @return {@code HttpResponse} as string
+	 * @throws Exception
+	 */
+	static List<String> sendGetRestReq(RestTemplate rstTmplt, String url, Map<String, String> headers,
+			Map<String, Object> params) throws Exception {
+		List<String> lst = null;
+		ResponseEntity<List<String>> respLst = rstTmplt.exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<String>>() {});
+		if (!isNull(respLst)) {
+			lst = respLst.getBody();
+		}
+		return lst;
 	}
 
 	/**
@@ -853,12 +894,12 @@ public interface IUtils {
 			Map<String, Object> params) throws Exception {
 		Assert.assertNotNull("Rest get request url must not be null", url);
 		String res = null;
+		// add params if any
+		String uri = addParamsInUrl(url, params);
+		logger.info("Get call for: " + uri);
+		HttpGet get = new HttpGet(uri);
+		CloseableHttpClient client = HttpClientBuilder.create().build();
 		try {
-			HttpClient client = HttpClientBuilder.create().build();
-			String uri = addParamsInUrl(url, params);
-			logger.info("Get call for: " + uri);
-			// add params if any
-			HttpGet get = new HttpGet(uri);
 			if (!isNull(headers)) {
 				headers.keySet().forEach((key) -> {
 					get.addHeader(key, headers.get(key));
@@ -871,6 +912,13 @@ public interface IUtils {
 		} catch (Throwable e) {
 			logger.info("Exception occured while hitting url : " + url + " "
 					+ e.getMessage());
+		} finally {
+			if (!isNull(get)) {
+				get.releaseConnection();
+			}
+			if (!isNull(client)) {
+				client.close();
+			}
 		}
 		logger.info("Response after hitting url : " + url + " " + res);
 		return res;

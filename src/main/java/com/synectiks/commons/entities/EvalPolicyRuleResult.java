@@ -21,6 +21,8 @@ public class EvalPolicyRuleResult extends Entity {
 	private String policyId;
 	private String ruleId;
 	private String docId;
+	private String index;
+	private String clz;
 
 	private boolean pass;
 	private String msgs;
@@ -61,6 +63,22 @@ public class EvalPolicyRuleResult extends Entity {
 		this.docId = docId;
 	}
 
+	public String getIndex() {
+		return index;
+	}
+
+	public void setIndex(String index) {
+		this.index = index;
+	}
+
+	public String getClz() {
+		return clz;
+	}
+
+	public void setClz(String clz) {
+		this.clz = clz;
+	}
+
 	public boolean isPass() {
 		return pass;
 	}
@@ -94,6 +112,16 @@ public class EvalPolicyRuleResult extends Entity {
 		if (ruleId != null) {
 			builder.append("\"ruleId\": \"");
 			builder.append(ruleId);
+			builder.append("\", ");
+		}
+		if (index != null) {
+			builder.append("\"index\": \"");
+			builder.append(index);
+			builder.append("\", ");
+		}
+		if (clz != null) {
+			builder.append("\"clz\": \"");
+			builder.append(clz);
 			builder.append("\", ");
 		}
 		if (docId != null) {
