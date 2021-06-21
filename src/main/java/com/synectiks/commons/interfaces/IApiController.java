@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.synectiks.commons.constants.IConsts;
@@ -47,6 +48,7 @@ public interface IApiController {
 	String URL_SSM = "/states";
 	String URL_SUBSCRIPTION = "/subscription";
 	String URL_USER = "/users";
+	String URL_ORGANIZATION = "/organization";
 	// String URL_ = "";
 
 	/**
@@ -92,7 +94,7 @@ public interface IApiController {
 	 * @return
 	 */
 	ResponseEntity<Object> delete(ObjectNode entity);
-
+	
 	/**
 	 * Method to check query parameter if its 'surveyjs' returns
 	 * {@link SurveyEntity} object.
@@ -110,4 +112,5 @@ public interface IApiController {
 		}
 		return entities;
 	}
+	
 }
