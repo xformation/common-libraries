@@ -493,11 +493,11 @@ public interface IUtils {
 	}
 
 	/**
-	 * Method to return String array from JSONArray string
+	 * Method to return String list from JSONArray string
 	 * @param input string like ["a","b"]
 	 * @return empty List if input is null or empty
 	 */
-	static String[] getArrayFromJsonString(String input) {
+	static List<String> getListFromJsonString(String input) {
 		List<String> lst = new ArrayList<>();
 		if (!isNullOrEmpty(input)) {
 			try {
@@ -509,6 +509,16 @@ public interface IUtils {
 				logger.error(th.getMessage(), th);
 			}
 		}
+		return lst;
+	}
+
+	/**
+	 * Method to return String array from JSONArray string
+	 * @param input string like ["a","b"]
+	 * @return empty List if input is null or empty
+	 */
+	static String[] getArrayFromJsonString(String input) {
+		List<String> lst = getListFromJsonString(input);
 		return lst.toArray(new String[lst.size()]);
 	}
 

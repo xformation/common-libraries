@@ -51,6 +51,7 @@ public interface IConsts {
 	String DEF_ENCODING = "UTF-8";
 	String JSON_DATE_FORMAT = "EEE MMM dd HH:mm:ss zzz yyyy";
 	String DEF_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	String PLAIN_DATE_FORMAT = "yyyyMMddHHmmss";
 
 	String LOGOUT_URL = "shiro.logout.url";
 	String SECURE_URLS = "shiro.secure.urls";
@@ -97,11 +98,13 @@ public interface IConsts {
 	String PRM_NOT_ONLY_IDS = "notOnlyIds";
 	String PRM_RES_AS_PSR = "asPolicyRuleRes";
 	String PRM_PAGE_SIZE = "pageSize";
+	String PRM_INDX_NAME = "index_name";
 
 	String KEY_SEARCH_URL = "synectiks.search.url";
 	String KEY_INDX_EVENT_FIRE = "search.fire.event.url";
 	//String URL_INDX_EVENT_FIRE = "http://localhost:8081/api/v1/auth/seach/fireEvent";
 	String URL_INDX_EVENT_FIRE = "http://localhost:8092/seach/fireEvent";
+	String KEY_SEARCH_SAVE_DOCS = "synectiks.search.savedocs";
 
 	String NESTED = "nested";
 	String PATH = "path";
