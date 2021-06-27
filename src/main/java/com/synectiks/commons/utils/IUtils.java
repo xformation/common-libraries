@@ -499,7 +499,7 @@ public interface IUtils {
 	 */
 	static List<String> getListFromJsonString(String input) {
 		List<String> lst = new ArrayList<>();
-		if (!isNullOrEmpty(input)) {
+		if (!isNullOrEmpty(input) && input.startsWith("[")) {
 			try {
 				JSONArray jarr = new JSONArray(input);
 				for (int i = 0; i < jarr.length(); i++) {
