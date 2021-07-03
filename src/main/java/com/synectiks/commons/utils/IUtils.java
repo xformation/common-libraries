@@ -876,6 +876,7 @@ public interface IUtils {
 	/**
 	 * Method to call a rest service using GET method url and params
 	 * @param url fully qualified url for rest service
+	 * @param rstTmplt
 	 * @param params {@code Map<String, Object>}
 	 * @return {@code HttpResponse} as string
 	 * @throws Exception
