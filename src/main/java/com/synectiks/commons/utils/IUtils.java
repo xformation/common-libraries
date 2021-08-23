@@ -478,7 +478,22 @@ public interface IUtils {
 	static <T> T createEntity(ObjectNode service, String user, Class<T> cls) {
 		T object = null;
 		if (!isNull(service) && !service.isEmpty(null)) {
-			object = getObjectFromValue(service.toString(), cls);
+			return createEntity(service.toString(), user, cls);
+		}
+		return object;
+	}
+
+	/**
+	 * Method to create new Entity object form json
+	 * @param <T>
+	 * @param service
+	 * @param user
+	 * @return
+	 */
+	static <T> T createEntity(String service, String user, Class<T> cls) {
+		T object = null;
+		if (!isNullOrEmpty(service)) {
+			object = getObjectFromValue(service, cls);
 			if (!isNull(object) && object instanceof Entity) {
 				Entity ent = (Entity) object;
 				if (isNullOrEmpty(ent.getCreatedBy())) {
@@ -597,9 +612,7 @@ public interface IUtils {
 					cal = Calendar.getInstance();
 				}
 				cal.setTimeInMillis(Long.valueOf(longDate));
-				Date dt = cal.getTime();
-				DateFormat df = new SimpleDateFormat(format);
-				res = df.format(dt);
+				res = getFormattedDate(cal.getTime(), format);
 			} catch (Throwable th) {
 				logger.error("Invalid date in long (" + longDate
 						+ ") or invalid date format (" + format + ")");
@@ -611,6 +624,26 @@ public interface IUtils {
 		return res;
 	}
 
+	/**
+	 * Method to get formatted date string from date object.
+	 * @param date
+	 * @param format
+	 * @return
+	 */
+	static String getFormattedDate(Date date, String format) {
+		String res = null;
+		DateFormat df = new SimpleDateFormat(format);
+		res = df.format(date);
+		return res;
+	}
+
+	/**
+	 * Method to get file attribute by key name.
+	 * @param <T>
+	 * @param file
+	 * @param attKey
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	static <T> T getFileAttribute(File file, String attKey) {
 		try {

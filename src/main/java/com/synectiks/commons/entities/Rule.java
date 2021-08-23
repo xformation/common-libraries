@@ -26,7 +26,14 @@ import com.synectiks.commons.constants.IDBConsts;
  *			"key >= toDate('2018-08-15 13:20:30', 'yyyy-MM-dd HH:mm:ss')",
  *			"(root.node.key1 = value1 OR key2 = value2)",
  *			"(root.node.key1 = value1 OR key2 = value2) AND (root.node.key3 = value3)"
- *		]
+ *		],
+ *		"severity": "",,
+ *		"logic": "",,
+ *		"remediation": "",,
+ *		"complianceTag": "",,
+ *		"logicHash": "",,
+ *		"category": "",,
+ *		"ruleId": "",
  *	}
  * </pre>
  * @author Rajesh
@@ -43,6 +50,13 @@ public class Rule extends PSqlEntity {
 	private String description;
 	@ElementCollection(targetClass = String.class)
 	private List<String> checks;
+	private String severity;
+	private String logic;
+	private String remediation;
+	private String complianceTag;
+	private String logicHash;
+	private String category;
+	private String ruleId;
 
 	public Rule() {
 		
@@ -87,14 +101,76 @@ public class Rule extends PSqlEntity {
 	public void setChecks(List<String> checks) {
 		this.checks = checks;
 	}
+	public String getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(String severity) {
+		this.severity = severity;
+	}
+
+	public String getLogic() {
+		return logic;
+	}
+
+	public void setLogic(String logic) {
+		this.logic = logic;
+	}
+
+	public String getRemediation() {
+		return remediation;
+	}
+
+	public void setRemediation(String remediation) {
+		this.remediation = remediation;
+	}
+
+	public String getComplianceTag() {
+		return complianceTag;
+	}
+
+	public void setComplianceTag(String complianceTag) {
+		this.complianceTag = complianceTag;
+	}
+
+	public String getLogicHash() {
+		return logicHash;
+	}
+
+	public void setLogicHash(String logicHash) {
+		this.logicHash = logicHash;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(String ruleId) {
+		this.ruleId = ruleId;
+	}
 
 	@Override
 	public String toString() {
 		return "{ \"id\": \"" + id + "\", "
 				+ (name != null ? "\"name\": \"" + name + "\", " : "")
 				+ (entity != null ? "\"entity\": \"" + entity + "\", " : "")
-				+ ("\"searchable\": \"" + searchable + "\", ")
+				+ ("\"searchable\": " + searchable + ", ")
 				+ (description != null ? "\"description\": \"" + description + "\", " : "")
+				+ ("\"severity\": \"" + severity + "\", ")
+				+ ("\"logic\": \"" + logic + "\", ")
+				+ ("\"remediation\": \"" + remediation + "\", ")
+				+ ("\"complianceTag\": \"" + complianceTag + "\", ")
+				+ ("\"logicHash\": \"" + logicHash + "\", ")
+				+ ("\"searchable\": \"" + category + "\", ")
+				+ ("\"searchable\": \"" + ruleId + "\", ")
 				+ (checks != null ? "\"checks\": \"" + checks + "\"" : "") + "}";
 	}
 

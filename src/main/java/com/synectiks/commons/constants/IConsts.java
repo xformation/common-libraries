@@ -52,6 +52,8 @@ public interface IConsts {
 	String JSON_DATE_FORMAT = "EEE MMM dd HH:mm:ss zzz yyyy";
 	String DEF_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	String PLAIN_DATE_FORMAT = "yyyyMMddHHmmss";
+	//2021-06-23T17:26:35.195Z
+	String FULL_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
 	String LOGOUT_URL = "shiro.logout.url";
 	String SECURE_URLS = "shiro.secure.urls";

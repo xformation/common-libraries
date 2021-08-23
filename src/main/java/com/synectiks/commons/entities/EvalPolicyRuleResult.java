@@ -23,6 +23,8 @@ public class EvalPolicyRuleResult extends Entity {
 	private String docId;
 	private String index;
 	private String clz;
+	private String custId;
+	private String scanId;
 
 	private boolean pass;
 	private String msgs;
@@ -77,6 +79,22 @@ public class EvalPolicyRuleResult extends Entity {
 
 	public void setClz(String clz) {
 		this.clz = clz;
+	}
+
+	public String getCustId() {
+		return custId;
+	}
+
+	public void setCustId(String custId) {
+		this.custId = custId;
+	}
+
+	public String getScanId() {
+		return scanId;
+	}
+
+	public void setScanId(String scanId) {
+		this.scanId = scanId;
 	}
 
 	public boolean isPass() {
